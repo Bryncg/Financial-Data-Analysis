@@ -2,14 +2,14 @@
 
 Learning  python by analysingfinancial markets.
 
-## current features
+## Current Features
 
--Download  Nvidia  stock data
--Calculate total  return
--Calculate CAGR (compund Annual Growth Rate)
--Calculate annual volatility
--Find biggest daily gain/loss
--Find worst/best month
+- Download Nvidia stock data
+- Calculate total return
+- Calculate CAGR (Compound Annual Growth Rate)
+- Calculate annual volatility
+- Find biggest daily gain/loss
+- Find worst/best month
 
 ## Future Features
 
