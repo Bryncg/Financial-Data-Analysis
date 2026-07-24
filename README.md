@@ -40,6 +40,33 @@ Features:
 - Displays a formatted comparison table
 - Plots adjusted historical share prices
 
+### 3. Equal-Weight Portfolio Analysis
+
+Models an equally weighted portfolio containing:
+
+- Nvidia
+- Apple
+- Microsoft
+- Alphabet
+- Amazon
+
+The portfolio begins with a value of $100,000 and assigns 20% to each
+holding.
+
+The current version assumes that the portfolio is rebalanced back to its
+target weights every trading day. Transaction costs, taxes and slippage
+are not included.
+
+The script calculates:
+
+- Daily portfolio returns
+- Annualised portfolio volatility
+- Compounded portfolio growth
+- Final portfolio value
+- Total profit
+- Total percentage return
+- Portfolio value over timeF
+
 ## Technologies Used
 
 - Python
@@ -56,3 +83,5 @@ Features:
 - Monte Carlo simulations
 - Portfolio optimisation (Modern Portfolio Theory)
 - Efficient Frontier
+- Add equal-weight portfolio analysis
+- Implement portfolio return, volatility and growth analysis
