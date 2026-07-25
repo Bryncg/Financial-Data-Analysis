@@ -1,27 +1,34 @@
 # Stock Market Analysis
 
-A collection of Python projects exploring quantitative finance and stock market analysis using historical market data from Yahoo Finance.
+A collection of Python projects exploring quantitative finance, portfolio analytics and financial data analysis using historical market data from Yahoo Finance.
 
-## Projects
+The repository is organised as a series of progressively more advanced projects, beginning with the analysis of a single stock and expanding into multi-stock comparisons and portfolio performance evaluation.
 
-### 1. Single Stock Analysis (`single_stock_analysis.py`)
+---
 
-Analyses an individual stock and calculates:
+# Projects
+
+## 1. Single Stock Analysis (`single_stock_analysis.py`)
+
+Analyses an individual stock using historical adjusted closing prices.
+
+Features:
 
 - Total Return
-- Annualised Return (CAGR)
+- Compound Annual Growth Rate (CAGR)
 - Annualised Volatility
 - Best and Worst Trading Day
-- Best and Worst Month
+- Best and Worst Calendar Month
 - Historical Price Chart
 
 ---
 
-### 2. Multi-Stock Performance Comparison (`compare_stocks.py`)
+## 2. Multi-Stock Performance Comparison (`compare_stocks.py`)
 
-Compares multiple companies over the same time period.
+Compares several companies over the same time period.
 
 Current tickers:
+
 - NVDA
 - AAPL
 - MSFT
@@ -29,59 +36,95 @@ Current tickers:
 - AMZN
 
 Features:
+
 - Downloads adjusted historical prices
-- Calculates:
-  - Starting and Ending Prices
-  - Total Return
-  - Annualised Return (CAGR)
-  - Annualised Volatility
-  - Best and Worst Trading Day
-  - Best and Worst Calendar Month
-- Displays a formatted comparison table
-- Plots adjusted historical share prices
+- Starting and Ending Prices
+- Total Return
+- Compound Annual Growth Rate (CAGR)
+- Annualised Volatility
+- Best and Worst Trading Day
+- Best and Worst Calendar Month
+- Formatted comparison table
+- Historical price comparison chart
 
-### 3. Equal-Weight Portfolio Analysis
+---
 
-Models an equally weighted portfolio containing:
+## 3. Equal-Weight Portfolio Analysis (`portfolio_analysis.py`)
+
+Models an equally weighted portfolio consisting of:
 
 - Nvidia
 - Apple
 - Microsoft
-- Alphabet
+- Alphabet (Google)
 - Amazon
 
-The portfolio begins with a value of $100,000 and assigns 20% to each
-holding.
+The portfolio begins with an initial value of **$100,000**, allocating **20%** of the capital to each holding.
 
-The current version assumes that the portfolio is rebalanced back to its
-target weights every trading day. Transaction costs, taxes and slippage
-are not included.
+The current implementation assumes the portfolio is rebalanced back to its target weights each trading day. Transaction costs, taxes and slippage are not included.
 
-The script calculates:
+The project calculates:
+
+### Portfolio Performance
 
 - Daily portfolio returns
-- Annualised portfolio volatility
-- Compounded portfolio growth
+- Portfolio growth through compounding
 - Final portfolio value
-- Total profit
-- Total percentage return
-- Portfolio value over timeF
+- Portfolio profit
+- Total return
+- Compound Annual Growth Rate (CAGR)
 
-## Technologies Used
+### Risk Metrics
+
+- Annualised portfolio volatility
+- Sharpe Ratio (assuming a zero risk-free rate)
+- Maximum Drawdown
+
+### Individual Stock Metrics
+
+- Starting and Ending Prices
+- Total Return
+- CAGR
+- Annualised Volatility
+- Sharpe Ratio
+- Maximum Drawdown
+
+### Visualisations
+
+- Portfolio value over time
+- Portfolio performance versus the S&P 500 benchmark
+- Portfolio drawdown over time
+
+### Reporting
+
+- Portfolio summary table
+- Individual stock comparison table
+
+---
+
+# Technologies Used
 
 - Python
 - Pandas
 - Matplotlib
 - yfinance
 
-## Future Improvements
+---
 
-- Portfolio performance analysis
-- Sharpe Ratio
+# Future Improvements
+
+- Buy-and-hold portfolio modelling
+- Monthly, quarterly and annual portfolio rebalancing
 - Beta calculations
 - Correlation matrix
-- Monte Carlo simulations
-- Portfolio optimisation (Modern Portfolio Theory)
-- Efficient Frontier
-- Add equal-weight portfolio analysis
-- Implement portfolio return, volatility and growth analysis
+- Covariance matrix
+- Monte Carlo portfolio simulations
+- Modern Portfolio Theory (MPT)
+- Efficient Frontier optimisation
+- Portfolio optimisation using maximum Sharpe and minimum variance portfolios
+
+---
+
+# Notes
+
+This repository is intended as a learning project that develops practical quantitative finance skills using Python. Each project builds on concepts introduced in the previous one while introducing additional financial statistics, portfolio analytics and data visualisation techniques.
