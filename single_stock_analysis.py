@@ -99,7 +99,7 @@ print(
 # Plot the historical closing price
 closing_prices.plot(figsize=(12, 6))
 
-plt.title("Nvidia Share Price")
+plt.title("NVIDIA Share Price")
 plt.xlabel("Date")
 plt.ylabel("Price (USD)")
 plt.show()

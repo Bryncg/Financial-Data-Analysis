@@ -270,6 +270,5 @@ percentage_formatter = plt.FuncFormatter(
 )
 
 plt.gca().yaxis.set_major_formatter(percentage_formatter)
-plt.legend()
 plt.tight_layout()
 plt.show()
