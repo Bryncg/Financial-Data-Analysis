@@ -2,7 +2,7 @@
 
 A collection of Python projects exploring quantitative finance, portfolio analytics and financial data analysis using historical market data from Yahoo Finance.
 
-The repository is organised as a series of progressively more advanced projects, beginning with the analysis of a single stock and expanding into multi-stock comparisons and portfolio performance evaluation.
+This repository documents my progress as I learn Python for quantitative finance. Each project builds on the previous one, starting with analysing a single stock before moving into portfolio construction, risk metrics and portfolio rebalancing.
 
 ---
 
@@ -12,7 +12,7 @@ The repository is organised as a series of progressively more advanced projects,
 
 Analyses an individual stock using historical adjusted closing prices.
 
-Features:
+### Features
 
 - Total Return
 - Compound Annual Growth Rate (CAGR)
@@ -25,9 +25,9 @@ Features:
 
 ## 2. Multi-Stock Performance Comparison (`compare_stocks.py`)
 
-Compares several companies over the same time period.
+Compares the historical performance of several companies over the same time period.
 
-Current tickers:
+### Current portfolio
 
 - NVDA
 - AAPL
@@ -35,49 +35,39 @@ Current tickers:
 - GOOGL
 - AMZN
 
-Features:
+### Features
 
-- Downloads adjusted historical prices
+- Downloads historical adjusted prices
 - Starting and Ending Prices
 - Total Return
 - Compound Annual Growth Rate (CAGR)
 - Annualised Volatility
 - Best and Worst Trading Day
 - Best and Worst Calendar Month
-- Formatted comparison table
+- Comparison table
 - Historical price comparison chart
 
 ---
 
 ## 3. Equal-Weight Portfolio Analysis (`portfolio_analysis.py`)
 
-Models an equally weighted portfolio consisting of:
+Builds an equally weighted portfolio using the same five stocks.
 
-- Nvidia
-- Apple
-- Microsoft
-- Alphabet (Google)
-- Amazon
+The portfolio starts with **$100,000**, allocating **20%** to each holding and rebalancing back to the target weights every trading day.
 
-The portfolio begins with an initial value of **$100,000**, allocating **20%** of the capital to each holding.
+### Portfolio Metrics
 
-The current implementation assumes the portfolio is rebalanced back to its target weights each trading day. Transaction costs, taxes and slippage are not included.
-
-The project calculates:
-
-### Portfolio Performance
-
-- Daily portfolio returns
-- Portfolio growth through compounding
-- Final portfolio value
-- Portfolio profit
-- Total return
+- Daily Portfolio Returns
+- Portfolio Growth
+- Final Portfolio Value
+- Portfolio Profit
+- Total Return
 - Compound Annual Growth Rate (CAGR)
 
 ### Risk Metrics
 
-- Annualised portfolio volatility
-- Sharpe Ratio (assuming a zero risk-free rate)
+- Annualised Volatility
+- Sharpe Ratio (0% risk-free rate)
 - Maximum Drawdown
 
 ### Individual Stock Metrics
@@ -91,14 +81,52 @@ The project calculates:
 
 ### Visualisations
 
-- Portfolio value over time
-- Portfolio performance versus the S&P 500 benchmark
-- Portfolio drawdown over time
+- Portfolio Growth
+- Portfolio vs S&P 500
+- Portfolio Drawdown
 
 ### Reporting
 
-- Portfolio summary table
-- Individual stock comparison table
+- Portfolio Summary Table
+- Individual Stock Comparison Table
+
+---
+
+## 4. Portfolio Rebalancing Comparison (`portfolio_rebalancing.py`)
+
+Compares how different rebalancing frequencies affect portfolio performance over time.
+
+The portfolio starts with **$100,000** invested equally across:
+
+- NVDA
+- AAPL
+- MSFT
+- GOOGL
+- AMZN
+
+Five strategies are compared against the **S&P 500** benchmark:
+
+- Buy and Hold
+- Daily Rebalancing
+- Monthly Rebalancing
+- Quarterly Rebalancing
+- Annual Rebalancing
+- S&P 500 Benchmark
+
+### Performance Metrics
+
+- Final Portfolio Value
+- Total Return
+- Compound Annual Growth Rate (CAGR)
+- Annualised Volatility
+- Sharpe Ratio (0% risk-free rate)
+- Maximum Drawdown
+
+### Output
+
+- Strategy comparison table
+- Portfolio value comparison chart
+- Performance comparison against the S&P 500
 
 ---
 
@@ -113,18 +141,24 @@ The project calculates:
 
 # Future Improvements
 
-- Buy-and-hold portfolio modelling
-- Monthly, quarterly and annual portfolio rebalancing
-- Beta calculations
+Some ideas I'd like to add as I continue learning:
+
+- Portfolio beta calculations
 - Correlation matrix
 - Covariance matrix
+- Rolling volatility
+- Rolling Sharpe ratio
 - Monte Carlo portfolio simulations
 - Modern Portfolio Theory (MPT)
 - Efficient Frontier optimisation
 - Portfolio optimisation using maximum Sharpe and minimum variance portfolios
+- Portfolio performance attribution
+- Factor analysis (Market, Size, Value, Momentum)
 
 ---
 
 # Notes
 
-This repository is intended as a learning project that develops practical quantitative finance skills using Python. Each project builds on concepts introduced in the previous one while introducing additional financial statistics, portfolio analytics and data visualisation techniques.
+This repository is primarily a learning project as I develop my Python skills alongside quantitative finance concepts.
+
+Rather than focusing on writing production-ready software, the aim is to understand how portfolio statistics, risk measures and investment strategies are calculated before gradually refactoring and improving the code as I learn more.

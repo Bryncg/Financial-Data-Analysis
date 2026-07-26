@@ -35,8 +35,8 @@ data = yf.download(
     progress=False,
 )
 
-closing_prices = data["Close"][tickers].copy()
-benchmark_prices = data["Close"][benchmark_ticker].copy()
+closing_prices = data["Close"][tickers].copy().dropna()
+benchmark_prices = data["Close"][benchmark_ticker].copy().dropna()
 
 # Find the length of the analysis period in years
 years = (
