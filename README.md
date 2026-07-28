@@ -2,8 +2,7 @@
 
 A collection of Python projects exploring quantitative finance, portfolio analytics and financial data analysis using historical market data from Yahoo Finance.
 
-This repository documents my progress as I learn Python for quantitative finance. Each project builds on the previous one, starting with analysing a single stock before moving into portfolio construction, risk metrics and portfolio rebalancing.
-
+This repository documents my progress as I learn Python for quantitative finance. Each project builds on the previous one, starting with analysing a single stock before moving into portfolio construction, risk analysis, correlation, portfolio rebalancing and eventually portfolio optimisation.
 ---
 
 # Projects
@@ -140,11 +139,42 @@ The following strategies are compared against the **S&P 500** benchmark:
 
 ---
 
+---
+
+## 5. Currency Correlation Matrix (`correlation_matrix_currency.py`)
+
+Calculates the Pearson correlation between the daily returns of seven major currency pairs and visualises the relationships using a correlation heatmap.
+
+Rather than comparing raw exchange rates, the project converts prices into daily percentage returns before calculating the Pearson correlation coefficient. This provides a more meaningful comparison of how currency pairs move relative to one another.
+
+### Currency Pairs
+
+- EUR/USD
+- GBP/USD
+- AUD/USD
+- NZD/USD
+- USD/CAD
+- USD/JPY
+- USD/CHF
+
+### Features
+
+- Downloads historical exchange-rate data from Yahoo Finance
+- Calculates daily percentage returns
+- Computes the Pearson correlation matrix
+- Visualises the results using a heatmap
+- Uses a fixed colour scale from **-1** to **1** for consistent comparisons
+
+### Example Output
+
+![Currency Correlation Matrix](images/currency_matrix_heatmap.png)
+
 # Technologies Used
 
 - Python
 - Pandas
 - Matplotlib
+- Seaborn
 - yfinance
 
 ---
@@ -153,9 +183,9 @@ The following strategies are compared against the **S&P 500** benchmark:
 
 Some ideas I'd like to add as I continue learning:
 
-- Portfolio Beta
-- Correlation Matrix
+- Live Rolling Correlation Dashboard
 - Covariance Matrix
+- Portfolio Beta
 - Rolling Volatility
 - Rolling Sharpe Ratio
 - Monte Carlo Portfolio Simulation
@@ -171,7 +201,9 @@ Some ideas I'd like to add as I continue learning:
 
 This repository is mainly a learning project as I develop my Python skills alongside quantitative finance concepts.
 
-The aim isn't to build production-ready software straight away, but to understand how portfolio statistics, risk measures and investment strategies work before gradually improving and refactoring the code as I learn more.
+The aim isn't to build production-ready software straight away, but to understand the statistics, mathematics and programming behind quantitative finance before gradually improving each project as I learn more.
+
+Each project builds on ideas from previous ones, allowing me to revisit earlier work and improve it as my understanding develops.
 
 ---
 
@@ -181,7 +213,7 @@ The aim isn't to build production-ready software straight away, but to understan
 - [x] Multi-Stock Comparison
 - [x] Portfolio Analysis
 - [x] Portfolio Rebalancing
-- [ ] Correlation Matrix
+- [x] Currency Correlation Matrix
 - [ ] Covariance Matrix
 - [ ] Monte Carlo Simulation
 - [ ] Efficient Frontier
