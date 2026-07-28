@@ -1,4 +1,4 @@
-# Stock Market Analysis
+# Financial Data Analysis  
 
 A collection of Python projects exploring quantitative finance, portfolio analytics and financial data analysis using historical market data from Yahoo Finance.
 
