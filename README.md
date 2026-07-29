@@ -207,6 +207,24 @@ Each project builds on ideas from previous ones, allowing me to revisit earlier 
 
 ---
 
+## Repository Structure
+
+```text
+financial-data-analysis/
+│
+├── images/              # Figures used in the README
+├── docs/                # Project notes and future ideas
+│
+├── single_stock_analysis.py
+├── compare_stocks.py
+├── portfolio_analysis.py
+├── portfolio_rebalancing.py
+├── correlation_matrix_currency.py
+│
+├── README.md
+└── LICENSE
+```
+
 # Roadmap
 
 - [x] Single Stock Analysis
