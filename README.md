@@ -99,7 +99,7 @@ The portfolio starts with **$100,000**, allocating **20%** to each holding and r
 
 ## 4. Portfolio Rebalancing Comparison (`portfolio_rebalancing.py`)
 
-Compares how different rebalancing frequencies affect portfolio performance over time.
+Compares how different portfolio rebalancing frequencies affect long-term performance, risk, and drawdowns using historical market data.
 
 The portfolio starts with **$100,000** invested equally across:
 
@@ -125,19 +125,38 @@ The following strategies are compared against the **S&P 500** benchmark:
 - Compound Annual Growth Rate (CAGR)
 - Annualised Volatility
 - Sharpe Ratio (0% Risk-Free Rate)
+- Sortino Ratio
+- Calmar Ratio
+- Downside Deviation
 - Maximum Drawdown
+- Longest Underwater Period
+- Peak, Valley and Recovery Dates
+- Peak-to-Recovery Duration
+- Valley-to-Recovery Duration
+- Positive vs Negative Monthly Performance
+
+### Visualisation
+
+The project generates a comparison chart showing:
+
+- Portfolio performance for every strategy
+- S&P 500 benchmark performance
+- Automatically calculated maximum drawdown period
+- Peak, valley and recovery annotations
+- Major historical market events for additional context
 
 ### Output
 
 - Strategy Comparison Table
-- Portfolio Value Comparison Chart
-- Performance Comparison Against the S&P 500
+- Portfolio Performance Comparison Chart
+- Risk and Performance Metrics
+- Historical Drawdown Analysis
 
 ### Example Output
 
-![Portfolio Rebalancing](images/portfolio_rebalancing.png)
+![Portfolio Rebalancing](images/portfolio_rebalancing_v2.png)
 
----
+The maximum drawdown period is calculated automatically from the portfolio data, while major market events are manually annotated to provide historical context for significant portfolio movements.
 
 ---
 

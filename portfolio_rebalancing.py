@@ -414,6 +414,184 @@ annual_rebalancing_portfolio_sharpe_ratio = (
     * (252 ** 0.5)
 )
 
+# =============================================================================
+# NEW METRICS ADDED - ANNUAL REBALANCING
+# =============================================================================
+
+# These new metrics currently apply only to the annual rebalancing strategy.
+
+# Keep returns below 0% and replace positive returns with zero.
+downside_returns = (
+    annual_rebalancing_portfolio_daily_returns.clip(upper=0)
+)
+
+# Daily downside deviation.
+downside_deviation = (
+    (downside_returns ** 2).mean() ** 0.5
+)
+
+# Annualised downside deviation for reporting.
+annualised_downside_deviation = (
+    downside_deviation * (252 ** 0.5)
+)
+
+# Sortino ratio using a 0% minimum acceptable return.
+annual_rebalancing_portfolio_sortino_ratio = (
+    annual_rebalancing_portfolio_daily_returns.mean()
+    / downside_deviation
+    * (252 ** 0.5)
+    if downside_deviation != 0
+    else float("nan")
+)
+
+# CAGR relative to the worst drawdown.
+annual_rebalancing_portfolio_calmar_ratio = (
+    annual_rebalancing_portfolio_cagr
+    / abs(annual_rebalancing_portfolio_max_drawdown)
+    if annual_rebalancing_portfolio_max_drawdown != 0
+    else float("nan")
+)
+
+
+# -----------------------------------------------------------------------------
+# POSITIVE AND NEGATIVE MONTHS
+# -----------------------------------------------------------------------------
+
+# Compound daily returns into complete monthly returns.
+annual_rebalancing_monthly_returns = (
+    (1 + annual_rebalancing_portfolio_daily_returns)
+    .resample("ME")
+    .prod()
+    - 1
+)
+
+positive_months = (
+    annual_rebalancing_monthly_returns > 0
+).sum()
+
+negative_months = (
+    annual_rebalancing_monthly_returns < 0
+).sum()
+
+flat_months = (
+    annual_rebalancing_monthly_returns == 0
+).sum()
+
+total_months = len(annual_rebalancing_monthly_returns)
+
+positive_month_percentage = (
+    positive_months / total_months * 100
+    if total_months > 0
+    else float("nan")
+)
+
+negative_month_percentage = (
+    negative_months / total_months * 100
+    if total_months > 0
+    else float("nan")
+)
+
+
+# -----------------------------------------------------------------------------
+# DRAWDOWN PERIOD LENGTHS
+# -----------------------------------------------------------------------------
+
+# Count the number of trading days spent below a previous peak
+# during every separate drawdown period.
+drawdown_period_lengths = (
+    annual_rebalancing_drawdown_series[
+        annual_rebalancing_drawdown_series < 0
+    ]
+    .groupby(
+        (
+            annual_rebalancing_drawdown_series >= 0
+        ).cumsum()
+    )
+    .count()
+)
+
+# Longest completed or ongoing underwater period in trading days.
+longest_drawdown_period = (
+    int(drawdown_period_lengths.max())
+    if not drawdown_period_lengths.empty
+    else 0
+)
+
+
+# -----------------------------------------------------------------------------
+# MAXIMUM DRAWDOWN DATES AND RECOVERY
+# -----------------------------------------------------------------------------
+
+drawdown_series = annual_rebalancing_drawdown_series
+
+# Date on which the maximum drawdown reached its lowest point.
+valley_date = drawdown_series.idxmin()
+
+# Date of the highest portfolio value before the valley.
+peak_date = (
+    annual_rebalancing_portfolio_value
+    .loc[:valley_date]
+    .idxmax()
+)
+
+peak_value = (
+    annual_rebalancing_portfolio_value.loc[peak_date]
+)
+
+# Search from the valley onwards for the first date on which
+# the previous peak value was regained.
+after_valley = (
+    annual_rebalancing_portfolio_value.loc[valley_date:]
+)
+
+recovered_values = (
+    after_valley[after_valley >= peak_value]
+)
+
+if not recovered_values.empty:
+    recovery_date = recovered_values.index[0]
+
+    # Time from the bottom of the drawdown back to the old peak.
+    recovery_time = recovery_date - valley_date
+
+    # Total time from the previous peak through to full recovery.
+    full_drawdown_duration = recovery_date - peak_date
+
+else:
+    recovery_date = None
+    recovery_time = None
+    full_drawdown_duration = None
+
+# =============================================================================
+# MAXIMUM DRAWDOWN SUMMARY
+# =============================================================================
+
+# Create a summary of the maximum drawdown period.
+if recovery_date is not None:
+
+    drawdown_summary = (
+        f"Maximum Drawdown\n"
+        f"Peak: {peak_date.strftime('%d %b %Y')}\n"
+        f"Valley: {valley_date.strftime('%d %b %Y')}\n"
+        f"Recovery: {recovery_date.strftime('%d %b %Y')}\n"
+        f"Drawdown: {annual_rebalancing_portfolio_max_drawdown:.2%}\n"
+        f"Recovery After Bottom: {recovery_time.days} Days\n"
+        f"Peak to Recovery: {full_drawdown_duration.days} Days\n"
+    )
+
+else:
+
+    drawdown_summary = (
+        f"Maximum Drawdown\n\n"
+        f"Peak: {peak_date.strftime('%d %b %Y')}\n"
+        f"Valley: {valley_date.strftime('%d %b %Y')}\n"
+        f"Recovery: Not Recovered\n"
+        f"Drawdown: {annual_rebalancing_portfolio_max_drawdown:.2%}"
+    )
+
+# Future improvement:
+# Calculate turnover inside each rebalancing loop by comparing
+# the portfolio weights before rebalancing with the target weights.
 
 # =============================================================================
 # S&P 500 BENCHMARK
@@ -552,6 +730,7 @@ strategy_comparison = pd.DataFrame({
     ]
 })
 
+
 # Use the strategy names as the row labels
 strategy_comparison = strategy_comparison.set_index("strategy")
 
@@ -574,59 +753,313 @@ formatted_strategy_comparison["Sharpe"] = (
 print("\nStrategy Comparison")
 print(formatted_strategy_comparison)
 
+# =============================================================================
+# PRINT NEW ANNUAL REBALANCING METRICS
+# =============================================================================
+
+print("\nAnnual Rebalancing - Additional Metrics")
+
+print(
+    f"Downside Deviation: "
+    f"{annualised_downside_deviation:.2%}"
+)
+
+print(
+    f"Sortino Ratio: "
+    f"{annual_rebalancing_portfolio_sortino_ratio:.2f}"
+)
+
+print(
+    f"Calmar Ratio: "
+    f"{annual_rebalancing_portfolio_calmar_ratio:.2f}"
+)
+
+print(
+    f"Positive Months: "
+    f"{positive_months} ({positive_month_percentage:.2f}%)"
+)
+
+print(
+    f"Negative Months: "
+    f"{negative_months} ({negative_month_percentage:.2f}%)"
+)
+
+print(
+    f"Flat Months: "
+    f"{flat_months}"
+)
+
+print(
+    f"Longest Underwater Period: "
+    f"{longest_drawdown_period} trading days"
+)
+
+print(
+    f"Maximum Drawdown Peak Date: "
+    f"{peak_date.strftime('%Y-%m-%d')}"
+)
+
+print(
+    f"Maximum Drawdown Valley Date: "
+    f"{valley_date.strftime('%Y-%m-%d')}"
+)
+
+if recovery_date is not None:
+    print(
+        f"Recovery Date: "
+        f"{recovery_date.strftime('%Y-%m-%d')}"
+    )
+
+    print(
+        f"Valley-to-Recovery Time: "
+        f"{recovery_time.days} calendar days"
+    )
+
+    print(
+        f"Peak-to-Recovery Duration: "
+        f"{full_drawdown_duration.days} calendar days"
+    )
+
+else:
+    print("Recovery Date: Not recovered by the end of the data")
+    print("Valley-to-Recovery Time: Not recovered")
+    print("Peak-to-Recovery Duration: Not recovered")
+
 
 # =============================================================================
 # PLOT PORTFOLIO STRATEGY VALUES
 # =============================================================================
 
-# Plot every strategy on the same graph
-plt.figure(figsize=(12, 6))
+# Create the figure and axis.
+# Using an axis object makes it easier to add annotations later.
+fig, ax = plt.subplots(figsize=(12, 6))
 
-plt.plot(
+# Plot every strategy on the same graph.
+ax.plot(
     buy_and_hold_portfolio_value,
     label="Buy and Hold Portfolio",
 )
 
-plt.plot(
+ax.plot(
     daily_rebalancing_portfolio_value,
     label="Daily Rebalancing Portfolio",
 )
 
-plt.plot(
+ax.plot(
     monthly_rebalancing_portfolio_value,
     label="Monthly Rebalancing Portfolio",
 )
 
-plt.plot(
+ax.plot(
     quarterly_rebalancing_portfolio_value,
     label="Quarterly Rebalancing Portfolio",
 )
 
-plt.plot(
+ax.plot(
     annual_rebalancing_portfolio_value,
     label="Annual Rebalancing Portfolio",
 )
 
-# Dashed line makes the benchmark easier to separate from the portfolio strategies
-plt.plot(
+# Dashed line makes the benchmark easier to separate.
+ax.plot(
     benchmark_value,
     label="S&P 500 Benchmark",
-    linestyle="--"
+    linestyle="--",
 )
 
-plt.title("Portfolio Strategy Value Comparison")
-plt.xlabel("Date")
-plt.ylabel("Portfolio Value (USD)")
 
-plt.grid(alpha=0.3)
-plt.legend()
+# =============================================================================
+# HIGHLIGHT THE MAXIMUM DRAWDOWN PERIOD
+# =============================================================================
 
-# Show full dollar values instead of scientific notation
-plt.gca().yaxis.set_major_formatter(
-    StrMethodFormatter('${x:,.0f}')
+# Shade the largest drawdown from the previous peak until recovery.
+# This is calculated automatically rather than manually choosing dates.
+
+if recovery_date is not None:
+
+    ax.axvspan(
+        peak_date,
+        recovery_date,
+        alpha=0.15,
+        label="Maximum Drawdown",
+    )
+
+else:
+
+    # If the portfolio never recovered before the end of the data,
+    # shade from the peak until the final trading day.
+
+    ax.axvspan(
+        peak_date,
+        annual_rebalancing_portfolio_value.index[-1],
+        alpha=0.15,
+        label="Maximum Drawdown",
+    )
+
+# =============================================================================
+# POSITION THE MAXIMUM DRAWDOWN SUMMARY
+# =============================================================================
+
+# Get the portfolio value at the peak and valley dates.
+# These values are used for the peak and valley markers.
+
+peak_value = (
+    annual_rebalancing_portfolio_value.loc[peak_date]
+)
+
+valley_value = (
+    annual_rebalancing_portfolio_value.loc[valley_date]
+)
+
+
+# Place the summary box in a fixed position inside the graph.
+# transform=ax.transAxes means the x and y values are percentages
+# of the graph area rather than dates and portfolio values.
+
+ax.text(
+    0.45,
+    0.72,
+    drawdown_summary,
+    transform=ax.transAxes,
+    fontsize=9,
+    ha="center",
+    va="top",
+    bbox={
+        "facecolor": "white",
+        "alpha": 0.85,
+        "edgecolor": "black",
+        "boxstyle": "round",
+    },
+)
+
+# =============================================================================
+# MARK THE IMPORTANT DRAWDOWN DATES
+# =============================================================================
+
+# Plot the previous peak.
+
+ax.scatter(
+    peak_date,
+    peak_value,
+    zorder=5,
+)
+
+ax.annotate(
+    "Peak",
+    xy=(peak_date, peak_value),
+    xytext=(0, 20),
+    textcoords="offset points",
+    ha="center",
+    arrowprops={"arrowstyle": "->"},
+)
+
+# Plot the lowest point of the maximum drawdown.
+
+ax.scatter(
+    valley_date,
+    valley_value,
+    zorder=5,
+)
+
+ax.annotate(
+    "Valley",
+    xy=(valley_date, valley_value),
+    xytext=(0, -35),
+    textcoords="offset points",
+    ha="center",
+    arrowprops={"arrowstyle": "->"},
+)
+
+# Only plot the recovery if one exists.
+
+if recovery_date is not None:
+
+    recovery_value = (
+        annual_rebalancing_portfolio_value.loc[recovery_date]
+    )
+
+    ax.scatter(
+        recovery_date,
+        recovery_value,
+        zorder=5,
+    )
+
+    ax.annotate(
+        "Recovery",
+        xy=(recovery_date, recovery_value),
+        xytext=(0, 25),
+        textcoords="offset points",
+        ha="center",
+        arrowprops={"arrowstyle": "->"},
+    )
+
+# =============================================================================
+# MARK IMPORTANT MARKET EVENTS
+# =============================================================================
+
+# The drawdown period is calculated automatically from portfolio data.
+# These event dates are added separately because price movements alone
+# cannot tell us what caused them.
+
+# Important historical events used to help explain portfolio movements.
+# These labels are entered manually because price data can detect a fall,
+# but it cannot reliably identify the real-world event that caused it.
+market_events = {
+    "COVID-19 Crash": "2020-03-16",
+    "2022 Inflation / Rate Hikes": "2022-06-15",
+    "Regional Banking Stress": "2023-03-13",
+    "DeepSeek Tech Sell-Off": "2025-01-27",
+    "Tariff Market Crash": "2025-04-03",
+}
+
+for event_name, event_date in market_events.items():
+
+    event_date = pd.Timestamp(event_date)
+
+    # Add a vertical line at the event date.
+    ax.axvline(
+        event_date,
+        linestyle=":",
+        linewidth=1,
+        alpha=0.4,
+    )
+
+    # Add the event name near the top of the chart.
+    ax.text(
+        event_date,
+        ax.get_ylim()[1] * 0.96,
+        event_name,
+        rotation=90,
+        ha="right",
+        va="top",
+        fontsize=8,
+    )
+
+# =============================================================================
+# FORMAT THE GRAPH
+# =============================================================================
+
+ax.set_title(
+    "Portfolio Strategy Performance (2020–Present)\n"
+    "Maximum Drawdown and Historical Market Events"
+)
+
+ax.set_xlabel("Date")
+
+ax.set_ylabel("Portfolio Value (USD)")
+
+ax.grid(alpha=0.3)
+
+ax.legend()
+
+# Show full dollar values instead of scientific notation.
+
+ax.yaxis.set_major_formatter(
+    StrMethodFormatter("${x:,.0f}")
 )
 
 plt.tight_layout()
+
 plt.show()
 
 # =============================================================================
@@ -735,3 +1168,4 @@ plt.show()
 # periodic_results["Monthly"]["Portfolio Value"]
 # periodic_results["Quarterly"]["CAGR"]
 # periodic_results["Annual"]["Sharpe Ratio"]
+
