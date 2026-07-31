@@ -2,7 +2,7 @@
 
 A collection of Python projects exploring quantitative finance, portfolio analytics and financial data analysis using historical market data from Yahoo Finance.
 
-This repository documents my progress as I learn Python for quantitative finance. Each project builds on the previous one, starting with analysing a single stock before moving into portfolio construction, risk analysis, correlation, portfolio rebalancing and eventually portfolio optimisation.
+This repository documents my progress as I learn Python for quantitative finance. Each project builds on the previous one, beginning with single-stock analysis before progressing into portfolio construction, performance attribution, risk analysis, correlation modelling, interactive financial dashboards and, eventually, portfolio optimisation.
 ---
 
 # Projects
@@ -188,6 +188,50 @@ Rather than comparing raw exchange rates, the project converts prices into daily
 
 ![Currency Correlation Matrix](images/currency_matrix_heatmap.png)
 
+
+---
+
+## 5.5. Rolling Correlation Dashboard (`rolling_correlation_analysis.py`)
+
+Extends the previous currency correlation matrix by calculating rolling 60-day Pearson correlation matrices, allowing changing relationships between major foreign exchange currency pairs to be explored through time.
+
+Rather than displaying a single static correlation matrix, the dashboard recalculates correlations using a moving rolling window. An interactive slider allows any available trading date to be selected, making it easier to identify how market relationships strengthen, weaken or reverse during different market environments.
+
+### Currency Pairs
+
+- EUR/USD
+- GBP/USD
+- AUD/USD
+- NZD/USD
+- USD/CAD
+- USD/JPY
+- USD/CHF
+
+### Features
+
+- Rolling 60-Day Pearson Correlation Matrix
+- Interactive Date Slider
+- Dynamic Correlation Heatmap
+- Strongest Positive Currency Pair
+- Strongest Negative Currency Pair
+- Average Correlation
+- Average Absolute Correlation
+- Correlation Regime Classification
+- Largest Correlation Change Between Rolling Windows
+- Previous vs Current Correlation Comparison
+- Interactive Summary Dashboard
+
+### Example Output
+
+![Rolling Correlation Dashboard](images/rolling_correlation_dashboard.png)
+
+### Interactive Demonstration
+
+![Rolling Correlation Dashboard Demo](images/rolling_correlation_dashboard.mp4)
+
+---
+
+
 # Technologies Used
 
 - Python
@@ -195,6 +239,7 @@ Rather than comparing raw exchange rates, the project converts prices into daily
 - Matplotlib
 - Seaborn
 - yfinance
+- numpy
 
 ---
 
@@ -202,7 +247,6 @@ Rather than comparing raw exchange rates, the project converts prices into daily
 
 Some ideas I'd like to add as I continue learning:
 
-- Live Rolling Correlation Dashboard
 - Covariance Matrix
 - Portfolio Beta
 - Rolling Volatility
@@ -213,8 +257,8 @@ Some ideas I'd like to add as I continue learning:
 - Portfolio Optimisation
 - CAPM
 - Factor Models (Fama-French)
-
----
+- Principal Component Analysis (PCA)
+- Cointegration Testing
 
 # Notes
 
