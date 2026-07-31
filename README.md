@@ -1,9 +1,8 @@
-# Financial Data Analysis  
+# Financial Data Analysis
 
 A collection of Python projects exploring quantitative finance, portfolio analytics and financial data analysis using historical market data from Yahoo Finance.
 
 This repository documents my progress as I learn Python for quantitative finance. Each project builds on the previous one, beginning with single-stock analysis before progressing into portfolio construction, performance attribution, risk analysis, correlation modelling, interactive financial dashboards and, eventually, portfolio optimisation.
----
 
 # Projects
 
@@ -275,15 +274,17 @@ Each project builds on ideas from previous ones, allowing me to revisit earlier 
 ```text
 financial-data-analysis/
 │
-├── images/              # Figures used in the README
-├── docs/                # Project notes and future ideas
+├── docs/                              # Project notes and future ideas
+├── images/                            # Figures and dashboard demonstrations
 │
 ├── single_stock_analysis.py
 ├── compare_stocks.py
 ├── portfolio_analysis.py
 ├── portfolio_rebalancing.py
 ├── correlation_matrix_currency.py
+├── rolling_correlation_analysis.py
 │
+├── requirements.txt
 ├── README.md
 └── LICENSE
 ```
@@ -295,9 +296,12 @@ financial-data-analysis/
 - [x] Portfolio Analysis
 - [x] Portfolio Rebalancing
 - [x] Currency Correlation Matrix
+- [x] Rolling Correlation Dashboard
 - [ ] Covariance Matrix
 - [ ] Monte Carlo Simulation
 - [ ] Efficient Frontier
 - [ ] Portfolio Optimisation
 - [ ] CAPM
 - [ ] Factor Models
+- [ ] Principal Component Analysis (PCA)
+- [ ] Cointegration Analysis
