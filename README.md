@@ -227,11 +227,7 @@ Rather than displaying a single static correlation matrix, the dashboard recalcu
 
 ### Interactive Demonstration
 
-![Rolling Correlation Dashboard](images/rolling_correlation_dashboard.png)
-
-▶ **Watch the interactive dashboard demonstration**
-
-[rolling_correlation_dashboard.mp4](images/rolling_correlation_dashboard.mp4)
+![Rolling Correlation Dashboard Demo](images/rolling_correlation_dashboard.gif)
 
 ---
 
