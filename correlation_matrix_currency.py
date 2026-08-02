@@ -79,12 +79,12 @@ print(correlation_matrix.round(2))
 # Plot the heatmap
 # --------------------------------------------------
 
-plt.figure(figsize=(11, 10))
+fig, ax = plt.subplots(figsize=(11, 10))
 
-plt.title("Currency Correlation Matrix (Daily Returns)")
+ax.set_title("Currency Correlation Matrix (Daily Returns)", fontsize=14, pad=20)
 
 # Rotate the labels so they don't overlap.
-plt.xticks(rotation=45, ha="right")
+ax.tick_params(axis="x", labelrotation=45)
 
 # Display the correlation matrix as a heatmap.
 sns.heatmap(
@@ -94,12 +94,13 @@ sns.heatmap(
     fmt=".2f",
     center=0,
     square=True,
-    cbar_kws={"shrink": 0.8},
+    cbar_kws={"shrink": 0.8, "label": "Correlation"},
     vmin=-1,
-    vmax=1
+    vmax=1,
+    ax=ax,
 )
 
 # Stops labels being cut off.
-plt.tight_layout()
+plt.tight_layout(rect=[0, 0.08, 1, 0.96])
 
 plt.show()
