@@ -203,7 +203,7 @@ Rather than comparing raw exchange rates, the project converts prices into daily
 
 ### Example Output
 
-![Currency Correlation Matrix](images/currency_matrix_heatmap.png)
+![Currency Correlation Matrix](images/currency_matrix_heatmap_v2.png)
 
 
 ---
