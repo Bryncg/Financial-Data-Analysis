@@ -144,6 +144,18 @@ The project generates a comparison chart showing:
 - Peak, valley and recovery annotations
 - Major historical market events for additional context
 
+### Strategy Definitions
+
+- **Buy and Hold** – The initial equal-weight allocation is purchased once and then left unchanged for the remainder of the investment period.
+
+- **Daily Rebalancing** – Portfolio weights are restored to equal allocations at the end of every trading day.
+
+- **Monthly Rebalancing** – Portfolio weights are restored to equal allocations once per month.
+
+- **Quarterly Rebalancing** – Portfolio weights are restored to equal allocations every three months.
+
+- **Annual Rebalancing** – Portfolio weights are restored to equal allocations once per year.
+
 ### Output
 
 - Strategy Comparison Table
@@ -156,6 +168,12 @@ The project generates a comparison chart showing:
 ![Portfolio Rebalancing](images/portfolio_rebalancing_v2.png)
 
 The maximum drawdown period is calculated automatically from the portfolio data, while major market events are manually annotated to provide historical context for significant portfolio movements.
+
+### Observations
+
+Because the portfolio is concentrated in large-cap technology stocks, the Buy-and-Hold strategy substantially outperforms the rebalanced strategies. As strong-performing positions (particularly NVIDIA) are allowed to grow over time, the portfolio benefits from compounding rather than periodically trimming winners back to equal weights.
+
+By contrast, the rebalancing strategies continuously sell outperforming holdings and reinvest into relatively weaker performers to maintain equal allocations. While this reduces concentration risk and keeps the portfolio diversified, it also limits the upside during strong bull markets driven by a small number of exceptional stocks.
 
 ---
 
@@ -230,6 +248,54 @@ Rather than displaying a single static correlation matrix, the dashboard recalcu
 
 ---
 
+## 6. Stock Covariance Matrix (`covariance_matrix_stocks.py`)
+
+Calculates and visualises the covariance structure of ten technology and growth stocks using historical daily returns.
+
+Unlike correlation, covariance takes both the direction of the relationship and the size of each stock's movements into account. This makes the covariance matrix an important input when calculating portfolio variance, volatility and risk contributions.
+
+### Stocks Analysed
+
+- Apple
+- Microsoft
+- Amazon
+- Alphabet
+- Meta
+- NVIDIA
+- Tesla
+- AMD
+- Intel
+- Palantir
+
+### Features
+
+- Downloads historical closing prices from Yahoo Finance
+- Calculates daily percentage returns
+- Computes the daily covariance matrix
+- Converts daily covariance into annualised covariance
+- Extracts unique stock pairs using the upper triangle of the matrix
+- Identifies the highest covariance pair
+- Identifies the lowest covariance pair
+- Calculates average covariance
+- Identifies the highest-variance stock
+- Identifies the lowest-variance stock
+- Displays an annualised covariance heatmap
+- Includes a summary panel beside the heatmap
+
+### Financial Interpretation
+
+Correlation measures the strength and direction of a relationship on a standardised scale from **-1** to **1**. Covariance also measures whether assets move together, but its value is affected by the size of their return movements.
+
+A high covariance can therefore result from two stocks being closely related, highly volatile, or both. The diagonal of the covariance matrix contains each stock's individual variance, while the off-diagonal values describe the joint movement between different stocks.
+
+The annualised covariance matrix produced in this project will later be used to calculate portfolio variance, portfolio volatility and asset-level risk contributions.
+
+### Example Output
+
+![Stock Covariance Matrix](images/covariance_matrix_stocks.png)
+
+---
+
 
 # Technologies Used
 
@@ -238,7 +304,7 @@ Rather than displaying a single static correlation matrix, the dashboard recalcu
 - Matplotlib
 - Seaborn
 - yfinance
-- numpy
+- Numpy
 
 ---
 
@@ -246,7 +312,7 @@ Rather than displaying a single static correlation matrix, the dashboard recalcu
 
 Some ideas I'd like to add as I continue learning:
 
-- Covariance Matrix
+- Portfolio Variance and Risk Contribution
 - Portfolio Beta
 - Rolling Volatility
 - Rolling Sharpe Ratio
@@ -283,6 +349,8 @@ financial-data-analysis/
 ├── portfolio_rebalancing.py
 ├── correlation_matrix_currency.py
 ├── rolling_correlation_analysis.py
+├── covariance_matrix_stocks.py
+
 │
 ├── requirements.txt
 ├── README.md
@@ -297,7 +365,10 @@ financial-data-analysis/
 - [x] Portfolio Rebalancing
 - [x] Currency Correlation Matrix
 - [x] Rolling Correlation Dashboard
-- [ ] Covariance Matrix
+- [x] Covariance Matrix
+- [ ] Portfolio Variance and Risk Contribution
+- [ ] Rolling Volatility
+- [ ] Rolling Sharpe Ratio
 - [ ] Monte Carlo Simulation
 - [ ] Efficient Frontier
 - [ ] Portfolio Optimisation
