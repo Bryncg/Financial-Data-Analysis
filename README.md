@@ -296,6 +296,48 @@ The annualised covariance matrix produced in this project will later be used to 
 
 ---
 
+---
+
+## 7. Portfolio Variance and Risk Contribution (`portfolio_variance.py`)
+
+Calculates the overall risk of an equally weighted stock portfolio and identifies how much each holding contributes to that total portfolio risk.
+
+Building on the covariance matrix from the previous project, this analysis applies Modern Portfolio Theory to calculate portfolio variance, portfolio volatility and asset-level risk contributions. Although every stock begins with the same portfolio weight, their contribution to overall portfolio risk differs because of differences in volatility and covariance with the other holdings.
+
+### Portfolio
+
+- Apple
+- Microsoft
+- Amazon
+- Alphabet
+- NVIDIA
+
+Each stock is allocated an equal portfolio weight of **20%**.
+
+### Features
+
+- Downloads historical adjusted closing prices from Yahoo Finance
+- Calculates daily percentage returns
+- Computes daily and annualised covariance matrices
+- Calculates portfolio variance using two independent methods
+- Calculates annualised portfolio volatility
+- Computes marginal risk contributions
+- Computes component risk contributions
+- Calculates percentage risk contributions
+- Produces a formatted portfolio risk table
+- Visualises percentage risk contributions with a colour-coded bar chart
+
+### Financial Interpretation
+
+Equal portfolio weights do not imply equal portfolio risk.
+
+Because NVIDIA has substantially higher volatility and stronger covariance with the rest of the portfolio, it contributes a much larger share of total portfolio risk than the other holdings. The remaining stocks contribute less than their 20% capital allocation, demonstrating how portfolio risk depends on both individual volatility and the relationships between assets rather than capital invested alone.
+
+### Example Output
+
+![Portfolio Variance and Risk Contribution](images/Portfolio_variance.png)
+
+---
 
 # Technologies Used
 
@@ -312,7 +354,7 @@ The annualised covariance matrix produced in this project will later be used to 
 
 Some ideas I'd like to add as I continue learning:
 
-- Portfolio Variance and Risk Contribution
+- Rolling Portfolio Variance
 - Portfolio Beta
 - Rolling Volatility
 - Rolling Sharpe Ratio
@@ -350,7 +392,7 @@ financial-data-analysis/
 ├── correlation_matrix_currency.py
 ├── rolling_correlation_analysis.py
 ├── covariance_matrix_stocks.py
-
+├── portfolio_variance.py
 │
 ├── requirements.txt
 ├── README.md
@@ -366,7 +408,8 @@ financial-data-analysis/
 - [x] Currency Correlation Matrix
 - [x] Rolling Correlation Dashboard
 - [x] Covariance Matrix
-- [ ] Portfolio Variance and Risk Contribution
+- [x] Portfolio Variance and Risk Contribution
+- [ ] Rolling Portfolio Variance
 - [ ] Rolling Volatility
 - [ ] Rolling Sharpe Ratio
 - [ ] Monte Carlo Simulation
