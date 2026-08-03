@@ -1032,7 +1032,7 @@ for event_name, event_date in market_events.items():
         rotation=90,
         ha="right",
         va="top",
-        fontsize=8,
+        fontsize=9,
     )
 
 # =============================================================================
