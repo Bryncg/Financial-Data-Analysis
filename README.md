@@ -339,6 +339,56 @@ Because NVIDIA has substantially higher volatility and stronger covariance with 
 
 ---
 
+---
+
+## 8. Rolling Portfolio Risk (`rolling_portfolio_risk.py`)
+
+Calculates how portfolio risk changes through time by combining rolling covariance matrices with Modern Portfolio Theory to produce rolling portfolio variance and annualised rolling volatility.
+
+Rather than treating portfolio risk as a single fixed value, this project recalculates the covariance matrix using a **60-trading-day rolling window**, allowing changes in market risk to be tracked across different market environments.
+
+The analysis uses an equally weighted portfolio consisting of:
+
+- Apple
+- Microsoft
+- Amazon
+- Alphabet
+- NVIDIA
+
+Each stock is allocated an equal portfolio weight of **20%**.
+
+### Features
+
+- Downloads historical adjusted closing prices from Yahoo Finance
+- Calculates daily percentage returns
+- Computes rolling 60-day covariance matrices
+- Annualises each rolling covariance matrix
+- Calculates rolling portfolio variance
+- Calculates rolling annualised portfolio volatility
+- Identifies:
+  - Current volatility
+  - Average volatility
+  - Maximum volatility
+  - Minimum volatility
+- Calculates equivalent variance statistics
+- Automatically highlights the current, highest and lowest portfolio volatility
+- Annotates major historical market events
+- Produces a rolling portfolio volatility chart
+
+### Financial Interpretation
+
+Portfolio risk changes over time.
+
+During periods of market stress, individual stock volatility rises and correlations between stocks often increase at the same time, causing overall portfolio risk to increase. During calmer market conditions, volatility and covariance generally fall, reducing overall portfolio risk.
+
+By recalculating the covariance matrix over every rolling window, this project demonstrates how portfolio risk evolves through time instead of assuming it remains constant.
+
+### Example Output
+
+![Rolling Portfolio Risk](images/rolling_portfolio_risk.png)
+
+---
+
 # Technologies Used
 
 - Python
@@ -407,15 +457,21 @@ financial-data-analysis/
 - [x] Portfolio Rebalancing
 - [x] Currency Correlation Matrix
 - [x] Rolling Correlation Dashboard
-- [x] Covariance Matrix
+- [x] Stock Covariance Matrix
 - [x] Portfolio Variance and Risk Contribution
-- [ ] Rolling Portfolio Variance
-- [ ] Rolling Volatility
+- [x] Rolling Portfolio Risk
 - [ ] Rolling Sharpe Ratio
-- [ ] Monte Carlo Simulation
+- [ ] Monte Carlo Portfolio Simulation
 - [ ] Efficient Frontier
 - [ ] Portfolio Optimisation
-- [ ] CAPM
+- [ ] CAPM and Portfolio Beta
 - [ ] Factor Models
-- [ ] Principal Component Analysis (PCA)
-- [ ] Cointegration Analysis
+- [ ] Return and Risk Attribution
+- [ ] Principal Component Analysis
+- [ ] Cointegration and Pairs Trading
+- [ ] Options Fundamentals
+- [ ] Binomial Option Pricing
+- [ ] Black-Scholes Option Pricing
+- [ ] Option Greeks
+- [ ] Monte Carlo Option Pricing
+- [ ] Implied Volatility and Volatility Surfaces
