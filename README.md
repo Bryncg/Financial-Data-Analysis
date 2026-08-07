@@ -389,6 +389,75 @@ By recalculating the covariance matrix over every rolling window, this project d
 
 ---
 
+---
+
+## 9. Rolling Portfolio Sharpe Ratio (`rolling_sharpe_ratio.py`)
+
+Measures how the risk-adjusted performance of an equally weighted stock portfolio changes through time using a 60-trading-day rolling Sharpe Ratio.
+
+Building on the rolling portfolio risk analysis from the previous project, this project combines rolling portfolio returns and rolling volatility with a time-varying risk-free rate. Rather than assuming a fixed risk-free rate, the 13-week U.S. Treasury bill yield is used as a historical proxy for the risk-free return.
+
+The analysis uses an equally weighted portfolio consisting of:
+
+- Apple
+- Microsoft
+- Amazon
+- Alphabet
+- NVIDIA
+
+Each stock is allocated an equal portfolio weight of **20%**.
+
+### Features
+
+- Downloads historical adjusted closing prices from Yahoo Finance
+- Calculates daily percentage returns
+- Calculates equal-weight portfolio daily returns
+- Downloads historical 13-week U.S. Treasury bill yields
+- Uses the Treasury yield as a time-varying risk-free rate
+- Aligns Treasury yields with portfolio trading dates
+- Converts the annual Treasury yield into a daily risk-free rate
+- Calculates daily portfolio excess returns
+- Computes rolling 60-day covariance matrices
+- Calculates annualised rolling portfolio volatility
+- Calculates 60-day rolling excess returns
+- Calculates the annualised 60-day rolling Sharpe Ratio
+- Validates portfolio volatility using an independent rolling standard deviation calculation
+- Identifies:
+  - Current Sharpe Ratio
+  - Average Sharpe Ratio
+  - Maximum Sharpe Ratio
+  - Minimum Sharpe Ratio
+  - Current 13-week Treasury yield
+- Includes a zero-Sharpe reference line
+- Includes an average Sharpe Ratio reference line
+- Automatically highlights the current, highest and lowest Sharpe Ratios
+- Annotates major historical market events
+- Produces a 60-day rolling portfolio Sharpe Ratio chart
+
+### Financial Interpretation
+
+The Sharpe Ratio measures portfolio return relative to the amount of risk taken to generate that return.
+
+A positive Sharpe Ratio indicates that the portfolio generated returns above the risk-free rate over the rolling period, while a negative Sharpe Ratio indicates that the portfolio underperformed the risk-free rate on a risk-adjusted basis.
+
+Unlike a single Sharpe Ratio calculated across the entire dataset, the rolling Sharpe Ratio shows how risk-adjusted performance changes through different market environments. This makes it possible to observe periods where strong returns justified the level of portfolio risk as well as periods where volatility increased without sufficient excess return.
+
+Using the historical 13-week Treasury yield also allows changes in interest rates to affect the calculation. As the risk-free rate rises, the portfolio must generate a higher return to achieve the same Sharpe Ratio.
+
+### Validation
+
+Rolling portfolio volatility is calculated from the portfolio covariance matrix using:
+
+`Portfolio Variance = wᵀΣw`
+
+The resulting volatility is independently checked against the rolling standard deviation of the portfolio's daily returns. The difference between the two methods is approximately zero, providing a numerical cross-check of the portfolio risk calculation.
+
+### Example Output
+
+![Rolling Portfolio Sharpe Ratio](images/rolling_sharpe_ratio.png)
+
+---
+
 # Technologies Used
 
 - Python
@@ -443,6 +512,8 @@ financial-data-analysis/
 ├── rolling_correlation_analysis.py
 ├── covariance_matrix_stocks.py
 ├── portfolio_variance.py
+├── rolling_portfolio_risk.py
+├── rolling_sharpe_ratio.py
 │
 ├── requirements.txt
 ├── README.md
@@ -460,7 +531,7 @@ financial-data-analysis/
 - [x] Stock Covariance Matrix
 - [x] Portfolio Variance and Risk Contribution
 - [x] Rolling Portfolio Risk
-- [ ] Rolling Sharpe Ratio
+- [x] Rolling Sharpe Ratio
 - [ ] Monte Carlo Portfolio Simulation
 - [ ] Efficient Frontier
 - [ ] Portfolio Optimisation
