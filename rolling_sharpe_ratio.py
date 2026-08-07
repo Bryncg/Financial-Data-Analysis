@@ -568,7 +568,7 @@ ax.annotate(
         current_sharpe_ratio_date,
         current_sharpe_ratio,
     ),
-    xytext=(-120, 195),
+    xytext=(-125, 195),
     textcoords="offset points",
     ha="left",
     bbox={
@@ -619,7 +619,7 @@ for event_name, event_date in market_events.items():
 # Add a small amount of space around the data so
 # the annotations stay inside the chart.
 ax.margins(
-    x=0.04,
+    x=0.03,
     y=0.08,
 )
 
@@ -635,5 +635,12 @@ ax.legend(
 )
 
 plt.tight_layout()
+
+plt.savefig(
+    r"C:\Users\Bryng\OneDrive\Desktop\rolling_sharpe_ratio.png",
+    dpi=300,
+    bbox_inches="tight",
+    pad_inches=0.2
+)
 
 plt.show()

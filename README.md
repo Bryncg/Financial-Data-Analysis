@@ -59,7 +59,7 @@ Compares the historical performance of multiple companies over the same time per
 
 Builds an equally weighted portfolio using the same five stocks.
 
-The portfolio starts with **$100,000**, allocating **20%** to each holding and rebalancing back to the target weights every trading day.
+The portfolio starts with $100,000, allocating 20% to each holding. Portfolio returns are calculated using constant 20% target weights, effectively representing a daily-rebalanced equal-weight portfolio.
 
 ### Portfolio Metrics
 
@@ -171,9 +171,10 @@ The maximum drawdown period is calculated automatically from the portfolio data,
 
 ### Observations
 
-Because the portfolio is concentrated in large-cap technology stocks, the Buy-and-Hold strategy substantially outperforms the rebalanced strategies. As strong-performing positions (particularly NVIDIA) are allowed to grow over time, the portfolio benefits from compounding rather than periodically trimming winners back to equal weights.
+Over the historical period analysed, the Buy-and-Hold strategy substantially outperformed the rebalanced strategies. Strong-performing positions, particularly NVIDIA, were allowed to grow into larger portfolio weights over time, meaning the portfolio captured more of their subsequent gains instead of repeatedly trimming them back to equal weights.
 
-By contrast, the rebalancing strategies continuously sell outperforming holdings and reinvest into relatively weaker performers to maintain equal allocations. While this reduces concentration risk and keeps the portfolio diversified, it also limits the upside during strong bull markets driven by a small number of exceptional stocks.
+By contrast, the rebalancing strategies periodically sold outperforming holdings and reinvested into relatively weaker performers to restore equal allocations. This reduced concentration risk and maintained the intended portfolio allocation, but during this particular period it also reduced exposure to the strongest-performing stocks.
+
 
 ---
 
@@ -339,7 +340,6 @@ Because NVIDIA has substantially higher volatility and stronger covariance with 
 
 ---
 
----
 
 ## 8. Rolling Portfolio Risk (`rolling_portfolio_risk.py`)
 
@@ -371,7 +371,7 @@ Each stock is allocated an equal portfolio weight of **20%**.
   - Maximum volatility
   - Minimum volatility
 - Calculates equivalent variance statistics
-- Automatically highlights the current, highest and lowest portfolio volatility
+- Automatically highlights the current, maximum and minimum portfolio volatility
 - Annotates major historical market events
 - Produces a rolling portfolio volatility chart
 
@@ -412,7 +412,7 @@ Each stock is allocated an equal portfolio weight of **20%**.
 - Downloads historical adjusted closing prices from Yahoo Finance
 - Calculates daily percentage returns
 - Calculates equal-weight portfolio daily returns
-- Downloads historical 13-week U.S. Treasury bill yields
+- Downloads historical 13-week U.S. Treasury bill yield data (^IRX)
 - Uses the Treasury yield as a time-varying risk-free rate
 - Aligns Treasury yields with portfolio trading dates
 - Converts the annual Treasury yield into a daily risk-free rate
@@ -471,20 +471,24 @@ The resulting volatility is independently checked against the rolling standard d
 
 # Future Improvements
 
+# Future Improvements
+
 Some ideas I'd like to add as I continue learning:
 
-- Rolling Portfolio Variance
-- Portfolio Beta
-- Rolling Volatility
-- Rolling Sharpe Ratio
 - Monte Carlo Portfolio Simulation
-- Modern Portfolio Theory (MPT)
 - Efficient Frontier
 - Portfolio Optimisation
-- CAPM
+- CAPM and Portfolio Beta
 - Factor Models (Fama-French)
+- Return and Risk Attribution
 - Principal Component Analysis (PCA)
-- Cointegration Testing
+- Cointegration and Pairs Trading
+- Options Fundamentals
+- Binomial Option Pricing
+- Black-Scholes Option Pricing
+- Option Greeks
+- Monte Carlo Option Pricing
+- Implied Volatility and Volatility Surfaces
 
 # Notes
 
@@ -532,7 +536,7 @@ financial-data-analysis/
 - [x] Portfolio Variance and Risk Contribution
 - [x] Rolling Portfolio Risk
 - [x] Rolling Sharpe Ratio
-- [ ] Monte Carlo Portfolio Simulation
+- [ ] Monte Carlo Portfolio Weight Simulation
 - [ ] Efficient Frontier
 - [ ] Portfolio Optimisation
 - [ ] CAPM and Portfolio Beta
