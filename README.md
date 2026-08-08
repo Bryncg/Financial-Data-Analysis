@@ -397,6 +397,8 @@ Measures how the risk-adjusted performance of an equally weighted stock portfoli
 
 Building on the rolling portfolio risk analysis from the previous project, this project combines rolling portfolio returns and rolling volatility with a time-varying risk-free rate. Rather than assuming a fixed risk-free rate, the 13-week U.S. Treasury bill yield is used as a historical proxy for the risk-free return.
 
+The project also includes a separate rolling annualised return analysis. This provides a direct view of the portfolio's recent return behaviour and allows absolute performance to be compared with risk-adjusted performance.
+
 The analysis uses an equally weighted portfolio consisting of:
 
 - Apple
@@ -413,12 +415,14 @@ Each stock is allocated an equal portfolio weight of **20%**.
 - Calculates daily percentage returns
 - Calculates equal-weight portfolio daily returns
 - Downloads historical 13-week U.S. Treasury bill yield data (^IRX)
-- Uses the Treasury yield as a time-varying risk-free rate
+- Uses the Treasury yield as a time-varying proxy for the risk-free rate
 - Aligns Treasury yields with portfolio trading dates
 - Converts the annual Treasury yield into a daily risk-free rate
 - Calculates daily portfolio excess returns
 - Computes rolling 60-day covariance matrices
-- Calculates annualised rolling portfolio volatility
+- Calculates annualised rolling portfolio variance and volatility
+- Calculates 60-day rolling average portfolio returns
+- Annualises the rolling portfolio return using 252 trading days
 - Calculates 60-day rolling excess returns
 - Calculates the annualised 60-day rolling Sharpe Ratio
 - Validates portfolio volatility using an independent rolling standard deviation calculation
@@ -428,21 +432,47 @@ Each stock is allocated an equal portfolio weight of **20%**.
   - Maximum Sharpe Ratio
   - Minimum Sharpe Ratio
   - Current 13-week Treasury yield
-- Includes a zero-Sharpe reference line
-- Includes an average Sharpe Ratio reference line
-- Automatically highlights the current, highest and lowest Sharpe Ratios
+  - Current rolling annualised portfolio return
+  - Average rolling annualised portfolio return
+  - Maximum rolling annualised portfolio return
+  - Minimum rolling annualised portfolio return
+- Includes zero and average reference lines for the Sharpe Ratio
+- Includes zero and average reference lines for rolling portfolio returns
+- Automatically highlights the current, maximum and minimum Sharpe Ratios
+- Automatically highlights the current, maximum and minimum rolling annualised returns
 - Annotates major historical market events
-- Produces a 60-day rolling portfolio Sharpe Ratio chart
+- Compares rolling portfolio returns with the 13-week Treasury yield
+- Produces a rolling Sharpe Ratio chart
+- Produces a rolling annualised portfolio return chart
 
 ### Financial Interpretation
 
-The Sharpe Ratio measures portfolio return relative to the amount of risk taken to generate that return.
+The Sharpe Ratio measures portfolio excess return relative to the amount of risk taken to generate that return.
 
-A positive Sharpe Ratio indicates that the portfolio generated returns above the risk-free rate over the rolling period, while a negative Sharpe Ratio indicates that the portfolio underperformed the risk-free rate on a risk-adjusted basis.
+A positive Sharpe Ratio indicates that the portfolio generated returns above the risk-free rate over the rolling period, while a negative Sharpe Ratio indicates that the portfolio underperformed the risk-free rate.
 
 Unlike a single Sharpe Ratio calculated across the entire dataset, the rolling Sharpe Ratio shows how risk-adjusted performance changes through different market environments. This makes it possible to observe periods where strong returns justified the level of portfolio risk as well as periods where volatility increased without sufficient excess return.
 
 Using the historical 13-week Treasury yield also allows changes in interest rates to affect the calculation. As the risk-free rate rises, the portfolio must generate a higher return to achieve the same Sharpe Ratio.
+
+The separate rolling return analysis provides additional context by showing how the portfolio's annualised return estimate changes through time. Comparing the return and Sharpe Ratio figures demonstrates that the period with the highest return is not necessarily the period with the strongest risk-adjusted performance.
+
+In this analysis, the maximum rolling annualised portfolio return occurred on **2020-06-10**, while the maximum rolling Sharpe Ratio occurred on **2025-07-17**. This shows that a period can generate exceptionally strong returns without necessarily providing the best return relative to the volatility taken.
+
+### Rolling Annualised Portfolio Return
+
+The rolling return figure shows the average daily portfolio return over the previous 60 trading days, annualised using 252 trading days.
+
+The analysis identified:
+
+- Current rolling annualised return: **27.23%**
+- Average rolling annualised return: **33.89%**
+- Maximum rolling annualised return: **193.86%** on **2020-06-10**
+- Minimum rolling annualised return: **-136.77%** on **2022-06-30**
+
+The 13-week Treasury yield is also plotted on the same figure to provide context for the risk-free return available through time.
+
+> **Note:** The rolling annualised return is not the actual return earned during the 60-day window. It represents the average daily return observed during that window annualised using 252 trading days. For example, the maximum value of 193.86% does not mean that the portfolio gained 193.86% during those 60 trading days.
 
 ### Validation
 
@@ -450,11 +480,19 @@ Rolling portfolio volatility is calculated from the portfolio covariance matrix 
 
 `Portfolio Variance = wᵀΣw`
 
-The resulting volatility is independently checked against the rolling standard deviation of the portfolio's daily returns. The difference between the two methods is approximately zero, providing a numerical cross-check of the portfolio risk calculation.
+The resulting volatility is independently checked against the rolling standard deviation of the portfolio's daily returns.
+
+The difference between the two methods is approximately zero, providing a numerical cross-check that the covariance-based portfolio volatility calculation agrees with the volatility calculated directly from the portfolio return series.
 
 ### Example Output
 
+#### 60-Day Rolling Portfolio Sharpe Ratio
+
 ![Rolling Portfolio Sharpe Ratio](images/rolling_sharpe_ratio.png)
+
+#### 60-Day Rolling Annualised Portfolio Return
+
+![Rolling Annualised Portfolio Return](images/rolling_portfolio_return.png)
 
 ---
 

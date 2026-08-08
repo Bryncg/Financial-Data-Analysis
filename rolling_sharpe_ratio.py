@@ -364,6 +364,42 @@ latest_annual_risk_free_rate = (
     annual_risk_free_rate.iloc[-1]
 )
 
+# --------------------------------------------------
+# Rolling return summary statistics
+# --------------------------------------------------
+
+# Current rolling annualised portfolio return.
+current_rolling_return = (
+    annualised_rolling_portfolio_returns.iloc[-1]
+)
+
+# Average rolling annualised portfolio return.
+average_rolling_return = (
+    annualised_rolling_portfolio_returns.mean()
+)
+
+# Highest rolling annualised portfolio return.
+maximum_rolling_return = (
+    annualised_rolling_portfolio_returns.max()
+)
+
+date_of_maximum_rolling_return = (
+    annualised_rolling_portfolio_returns.idxmax()
+)
+
+# Lowest rolling annualised portfolio return.
+minimum_rolling_return = (
+    annualised_rolling_portfolio_returns.min()
+)
+
+date_of_minimum_rolling_return = (
+    annualised_rolling_portfolio_returns.idxmin()
+)
+
+# Latest available rolling return date.
+current_rolling_return_date = (
+    annualised_rolling_portfolio_returns.index[-1]
+)
 
 # --------------------------------------------------
 # Display summary statistics
@@ -398,6 +434,29 @@ print(
     f"{latest_annual_risk_free_rate:.2%}"
 )
 
+print("\nRolling Portfolio Return Summary Statistics:")
+
+print(
+    f"Current Rolling Return: "
+    f"{current_rolling_return:.2%}"
+)
+
+print(
+    f"Average Rolling Return: "
+    f"{average_rolling_return:.2%}"
+)
+
+print(
+    f"Maximum Rolling Return: "
+    f"{maximum_rolling_return:.2%} "
+    f"on {date_of_maximum_rolling_return.date()}"
+)
+
+print(
+    f"Minimum Rolling Return: "
+    f"{minimum_rolling_return:.2%} "
+    f"on {date_of_minimum_rolling_return.date()}"
+)
 
 # --------------------------------------------------
 # Historical market events
@@ -636,11 +695,261 @@ ax.legend(
 
 plt.tight_layout()
 
-plt.savefig(
-    r"C:\Users\Bryng\OneDrive\Desktop\rolling_sharpe_ratio.png",
-    dpi=300,
-    bbox_inches="tight",
-    pad_inches=0.2
+#plt.savefig(
+#    r"C:\Users\Bryng\OneDrive\Desktop\rolling_sharpe_ratio.png",
+#    dpi=300,
+#    bbox_inches="tight",
+#    pad_inches=0.2
+#)
+
+plt.show()
+
+# --------------------------------------------------
+# Plot rolling annualised portfolio return
+# --------------------------------------------------
+
+fig, ax = plt.subplots(
+    figsize=(15, 8)
 )
+
+# Plot the 60-day rolling annualised portfolio return.
+ax.plot(
+    annualised_rolling_portfolio_returns.index,
+    annualised_rolling_portfolio_returns,
+    label="Annualised Portfolio Return",
+    color="blue",
+    linewidth=2,
+)
+
+ax.set_title(
+    "60-Day Rolling Annualised Portfolio Return",
+    fontsize=16,
+)
+
+ax.set_xlabel("Date")
+
+ax.set_ylabel(
+    "Annualised Rolling Return"
+)
+
+
+# --------------------------------------------------
+# Return reference lines
+# --------------------------------------------------
+
+# Show the average rolling return across the full period.
+ax.axhline(
+    y=average_rolling_return,
+    color="red",
+    linestyle="--",
+    label=(
+        f"Average Rolling Return: "
+        f"{average_rolling_return:.2%}"
+    ),
+)
+
+# Separate positive and negative rolling returns.
+ax.axhline(
+    y=0,
+    color="black",
+    linestyle="--",
+    label="Zero Rolling Return",
+)
+
+
+# --------------------------------------------------
+# Mark important rolling return values
+# --------------------------------------------------
+
+# Mark the maximum rolling return.
+ax.scatter(
+    date_of_maximum_rolling_return,
+    maximum_rolling_return,
+    color="green",
+    zorder=5,
+    label=(
+        f"Max Rolling Return: "
+        f"{maximum_rolling_return:.2%}"
+    ),
+)
+
+ax.annotate(
+    (
+        f"Max Rolling Return: {maximum_rolling_return:.2%}\n"
+        f"{date_of_maximum_rolling_return.date()}"
+    ),
+    xy=(
+        date_of_maximum_rolling_return,
+        maximum_rolling_return,
+    ),
+    xytext=(40, -15),
+    textcoords="offset points",
+    ha="left",
+    bbox={
+        "boxstyle": "round",
+        "fc": "white",
+        "ec": "green",
+        "alpha": 0.9,
+    },
+    arrowprops={
+        "arrowstyle": "->",
+        "color": "black",
+    },
+)
+
+# Mark the minimum rolling return.
+ax.scatter(
+    date_of_minimum_rolling_return,
+    minimum_rolling_return,
+    color="orange",
+    zorder=5,
+    label=(
+        f"Min Rolling Return: "
+        f"{minimum_rolling_return:.2%}"
+    ),
+)
+
+ax.annotate(
+    (
+        f"Min Rolling Return: {minimum_rolling_return:.2%}\n"
+        f"{date_of_minimum_rolling_return.date()}"
+    ),
+    xy=(
+        date_of_minimum_rolling_return,
+        minimum_rolling_return,
+    ),
+    xytext=(-175, 20),
+    textcoords="offset points",
+    bbox={
+        "boxstyle": "round",
+        "fc": "white",
+        "ec": "orange",
+        "alpha": 0.9,
+    },
+    arrowprops={
+        "arrowstyle": "->",
+        "color": "black",
+    },
+)
+
+# Mark the current rolling return.
+ax.scatter(
+    current_rolling_return_date,
+    current_rolling_return,
+    color="purple",
+    zorder=5,
+    label=(
+        f"Current Rolling Return: "
+        f"{current_rolling_return:.2%}"
+    ),
+)
+
+ax.annotate(
+    (
+        f"Current Rolling Return: {current_rolling_return:.2%}\n"
+        f"{current_rolling_return_date.date()}"
+    ),
+    xy=(
+        current_rolling_return_date,
+        current_rolling_return,
+    ),
+    xytext=(-140, 145),
+    textcoords="offset points",
+    ha="left",
+    bbox={
+        "boxstyle": "round",
+        "fc": "white",
+        "ec": "purple",
+        "alpha": 0.9,
+    },
+    arrowprops={
+        "arrowstyle": "->",
+        "color": "black",
+        "relpos": (1.0, 0.0),
+    },
+)
+
+
+# --------------------------------------------------
+# Add historical market events
+# --------------------------------------------------
+
+for event_name, event_date in market_events.items():
+    event_date = pd.Timestamp(
+        event_date
+    )
+
+    ax.axvline(
+        event_date,
+        linestyle=":",
+        linewidth=1,
+        alpha=0.25,
+    )
+
+    # Keep each event label near the top of the chart.
+    ax.text(
+        event_date,
+        0.92,
+        event_name,
+        transform=ax.get_xaxis_transform(),
+        rotation=90,
+        ha="right",
+        va="top",
+        fontsize=8,
+    )
+
+
+# --------------------------------------------------
+# Add Treasury yield
+# --------------------------------------------------
+
+# Plot the 13-week Treasury yield used as the
+# risk-free rate proxy in the Sharpe calculation.
+ax.plot(
+    annual_risk_free_rate.index,
+    annual_risk_free_rate,
+    label="13-Week Treasury Yield",
+    color="orange",
+    linewidth=2,
+)
+
+
+# --------------------------------------------------
+# Format rolling return chart
+# --------------------------------------------------
+
+# Display rolling returns and Treasury yields
+# as percentages.
+ax.yaxis.set_major_formatter(
+    plt.FuncFormatter(
+        lambda value, position: f"{value:.0%}"
+    )
+)
+
+# Add space around the chart for the annotations.
+ax.margins(
+    x=0.03,
+    y=0.05,
+)
+
+ax.grid(
+    alpha=0.25
+)
+
+# Keep the legend outside the chart so it does not
+# cover the current return annotation.
+ax.legend(
+    loc="upper left",
+    bbox_to_anchor=(1.01, 1),
+)
+
+plt.tight_layout()
+
+#plt.savefig(
+#    r"C:\Users\Bryng\OneDrive\Desktop\rolling_portfolio_return.png",
+#    dpi=300,
+#    bbox_inches="tight",
+#    pad_inches=0.2,
+#)
 
 plt.show()
