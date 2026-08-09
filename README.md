@@ -2,7 +2,7 @@
 
 A collection of Python projects exploring quantitative finance, portfolio analytics and financial data analysis using historical market data from Yahoo Finance.
 
-This repository documents my progress as I learn Python for quantitative finance. Each project builds on the previous one, beginning with single-stock analysis before progressing into portfolio construction, performance attribution, risk analysis, correlation modelling, interactive financial dashboards and, eventually, portfolio optimisation.
+This repository documents my progress as I learn Python for quantitative finance. Each project builds on the previous one, beginning with single-stock analysis before progressing into portfolio construction, performance attribution, risk analysis, correlation modelling, interactive financial dashboards, Monte Carlo portfolio simulation and, eventually, portfolio optimisation.
 
 # Projects
 
@@ -175,7 +175,6 @@ Over the historical period analysed, the Buy-and-Hold strategy substantially out
 
 By contrast, the rebalancing strategies periodically sold outperforming holdings and reinvested into relatively weaker performers to restore equal allocations. This reduced concentration risk and maintained the intended portfolio allocation, but during this particular period it also reduced exposure to the strongest-performing stocks.
 
-
 ---
 
 ## 5. Currency Correlation Matrix (`correlation_matrix_currency.py`)
@@ -205,7 +204,6 @@ Rather than comparing raw exchange rates, the project converts prices into daily
 ### Example Output
 
 ![Currency Correlation Matrix](images/currency_matrix_heatmap_v2.png)
-
 
 ---
 
@@ -289,13 +287,11 @@ Correlation measures the strength and direction of a relationship on a standardi
 
 A high covariance can therefore result from two stocks being closely related, highly volatile, or both. The diagonal of the covariance matrix contains each stock's individual variance, while the off-diagonal values describe the joint movement between different stocks.
 
-The annualised covariance matrix produced in this project will later be used to calculate portfolio variance, portfolio volatility and asset-level risk contributions.
+The annualised covariance matrix produced in this project is used in later projects to calculate portfolio variance, portfolio volatility and asset-level risk contributions.
 
 ### Example Output
 
 ![Stock Covariance Matrix](images/covariance_matrix_stocks.png)
-
----
 
 ---
 
@@ -339,7 +335,6 @@ Because NVIDIA has substantially higher volatility and stronger covariance with 
 ![Portfolio Variance and Risk Contribution](images/Portfolio_variance.png)
 
 ---
-
 
 ## 8. Rolling Portfolio Risk (`rolling_portfolio_risk.py`)
 
@@ -386,8 +381,6 @@ By recalculating the covariance matrix over every rolling window, this project d
 ### Example Output
 
 ![Rolling Portfolio Risk](images/rolling_portfolio_risk.png)
-
----
 
 ---
 
@@ -457,13 +450,13 @@ Using the historical 13-week Treasury yield also allows changes in interest rate
 
 The separate rolling return analysis provides additional context by showing how the portfolio's annualised return estimate changes through time. Comparing the return and Sharpe Ratio figures demonstrates that the period with the highest return is not necessarily the period with the strongest risk-adjusted performance.
 
-In this analysis, the maximum rolling annualised portfolio return occurred on **2020-06-10**, while the maximum rolling Sharpe Ratio occurred on **2025-07-17**. This shows that a period can generate exceptionally strong returns without necessarily providing the best return relative to the volatility taken.
+In the example analysis shown here, the maximum rolling annualised portfolio return occurred on **2020-06-10**, while the maximum rolling Sharpe Ratio occurred on **2025-07-17**. This shows that a period can generate exceptionally strong returns without necessarily providing the best return relative to the volatility taken.
 
 ### Rolling Annualised Portfolio Return
 
 The rolling return figure shows the average daily portfolio return over the previous 60 trading days, annualised using 252 trading days.
 
-The analysis identified:
+The example analysis shown in the figure identified:
 
 - Current rolling annualised return: **27.23%**
 - Average rolling annualised return: **33.89%**
@@ -496,6 +489,82 @@ The difference between the two methods is approximately zero, providing a numeri
 
 ---
 
+## 10. Monte Carlo Portfolio Weight Simulation (`monte_carlo_portfolio_simulation.py`)
+
+Simulates 100,000 different portfolio allocations to explore the relationship between expected return, volatility and risk-adjusted performance across different combinations of the same five stocks.
+
+Building on the portfolio return, covariance, volatility and Sharpe Ratio calculations from previous projects, this project removes the fixed 20% portfolio weights and allows the allocation to each stock to vary. Random long-only portfolio weights are generated using a Dirichlet distribution, with every simulated portfolio constrained to a total weight of 100%.
+
+The analysis uses:
+
+- Apple
+- Amazon
+- Alphabet
+- Microsoft
+- NVIDIA
+
+### Features
+
+- Downloads historical adjusted closing prices from Yahoo Finance
+- Calculates daily percentage returns
+- Calculates annualised historical mean returns for each stock as estimates of expected return
+- Computes daily and annualised covariance matrices
+- Downloads the 3-month U.S. Treasury constant maturity rate (DGS3MO) from FRED
+- Uses the historical average 3-month Treasury rate as the annual risk-free rate proxy
+- Simulates 100,000 different portfolio allocations
+- Uses a fixed random seed for reproducible simulation results
+- Generates long-only portfolio weights using a Dirichlet distribution
+- Ensures each simulated portfolio's weights sum to 100%
+- Calculates expected annual return for every simulated portfolio
+- Calculates annualised volatility for every simulated portfolio
+- Calculates the Sharpe Ratio for every simulated portfolio
+- Identifies the portfolio with the maximum Sharpe Ratio
+- Identifies the portfolio with the minimum volatility
+- Calculates an equal-weight portfolio as a benchmark
+- Compares return, volatility, Sharpe Ratio and individual stock weights across the three selected portfolios
+- Independently recalculates the maximum Sharpe and minimum volatility portfolios to verify the selected results
+- Produces a Monte Carlo risk-return scatter plot
+- Uses the Sharpe Ratio as the colour scale across simulated portfolios
+- Highlights the maximum Sharpe, minimum volatility and equal-weight portfolios
+
+### Financial Interpretation
+
+The simulation demonstrates how changing portfolio weights affects the trade-off between expected return and risk.
+
+Each point on the chart represents a different allocation across the five stocks. Portfolios further to the right have higher expected volatility, while portfolios higher on the chart have higher expected annual returns. The colour of each portfolio represents its Sharpe Ratio, allowing risk-adjusted performance to be compared across the simulated allocations.
+
+The maximum Sharpe Ratio portfolio represents the allocation with the highest risk-adjusted performance found among the 100,000 simulated portfolios. The minimum volatility portfolio represents the lowest-risk allocation found among those simulated portfolios.
+
+The equal-weight portfolio provides a benchmark against the 100,000 randomly generated allocations and demonstrates how allowing portfolio weights to vary can produce different combinations of expected return, volatility and risk-adjusted performance.
+
+The results also demonstrate the effect of diversification. Portfolio volatility depends not only on the volatility of the individual stocks, but also on their covariance with one another. Changing the allocation therefore changes both the expected return and the overall risk of the portfolio.
+
+### Portfolio Weight Simulation
+
+Portfolio weights are generated using a Dirichlet distribution. This produces long-only random allocations where every stock has a non-negative weight and the weights of each portfolio sum to 100%.
+
+A fixed random seed is used so that the same 100,000 random portfolio weight allocations are generated each time the program is run. For unchanged input market data, this makes the simulation results reproducible and allows the calculated portfolios to be independently checked.
+
+### Benchmark Portfolio
+
+An equal-weight portfolio is calculated separately using a 20% allocation to each stock.
+
+This provides a consistent benchmark against the simulated portfolios and allows the effect of changing portfolio allocations to be compared with the equal-weight approach used throughout several earlier projects.
+
+### Validation
+
+The maximum Sharpe Ratio and minimum volatility portfolios identified by the simulation are independently reconstructed using their selected portfolio weights.
+
+Their expected returns, portfolio volatilities and Sharpe Ratios are then recalculated and compared with the values stored by the simulation.
+
+The recalculated values match the original results, providing a numerical cross-check that the highlighted portfolios correspond to the correct simulated weight combinations.
+
+### Example Output
+
+![Monte Carlo Portfolio Simulation](images/monte_carlo_portfolio_simulations.png)
+
+---
+
 # Technologies Used
 
 - Python
@@ -503,16 +572,22 @@ The difference between the two methods is approximately zero, providing a numeri
 - Matplotlib
 - Seaborn
 - yfinance
-- Numpy
+- NumPy
+- pandas-datareader
 
 ---
 
+# Data Sources
+
+- Yahoo Finance
+- FRED
+
+---
 
 # Future Improvements
 
 Some ideas I'd like to add as I continue learning:
 
-- Monte Carlo Portfolio Simulation
 - Efficient Frontier
 - Portfolio Optimisation
 - CAPM and Portfolio Beta
@@ -555,10 +630,12 @@ financial-data-analysis/
 ├── portfolio_variance.py
 ├── rolling_portfolio_risk.py
 ├── rolling_sharpe_ratio.py
+├── monte_carlo_portfolio_simulation.py
 │
 ├── requirements.txt
 ├── README.md
 └── LICENSE
+
 ```
 
 # Roadmap
