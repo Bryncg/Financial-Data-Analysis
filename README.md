@@ -573,7 +573,7 @@ financial-data-analysis/
 - [x] Portfolio Variance and Risk Contribution
 - [x] Rolling Portfolio Risk
 - [x] Rolling Sharpe Ratio
-- [ ] Monte Carlo Portfolio Weight Simulation
+- [x] Monte Carlo Portfolio Weight Simulation
 - [ ] Efficient Frontier
 - [ ] Portfolio Optimisation
 - [ ] CAPM and Portfolio Beta
