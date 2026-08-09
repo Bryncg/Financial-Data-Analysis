@@ -507,7 +507,6 @@ The difference between the two methods is approximately zero, providing a numeri
 
 ---
 
-# Future Improvements
 
 # Future Improvements
 
