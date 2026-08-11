@@ -1,6 +1,6 @@
 # Financial Data Analysis
 
-A collection of Python projects exploring quantitative finance, portfolio analytics and financial data analysis using historical market data from Yahoo Finance.
+A collection of Python projects exploring quantitative finance, portfolio analytics and financial data analysis using historical market data from sources including Yahoo Finance and FRED.
 
 This repository documents my progress as I learn Python for quantitative finance. Each project builds on the previous one, beginning with single-stock analysis before progressing into portfolio construction, performance attribution, risk analysis, correlation modelling, interactive financial dashboards, Monte Carlo portfolio simulation and, eventually, portfolio optimisation.
 
@@ -581,6 +581,15 @@ The recalculated values match the original results, providing a numerical cross-
 
 - Yahoo Finance
 - FRED
+
+---
+
+# Installation
+
+Clone the repository and install the required Python packages using:
+
+```bash
+pip install -r requirements.txt
 
 ---
 
