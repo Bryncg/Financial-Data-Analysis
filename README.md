@@ -565,6 +565,153 @@ The recalculated values match the original results, providing a numerical cross-
 
 ---
 
+## 11. Efficient Frontier and Portfolio Optimisation (`efficient_frontier.py`)
+
+Constructs the efficient frontier and uses numerical optimisation to identify optimal portfolio allocations across the same five stocks used in the previous Monte Carlo portfolio simulation.
+
+Building on the random portfolio search from Project 10, this project uses SciPy optimisation to directly solve for portfolio weights rather than relying only on randomly generated allocations. The optimiser finds the minimum-volatility portfolio, constructs the efficient frontier across a range of target returns, and identifies the portfolio with the maximum Sharpe Ratio.
+
+The analysis uses:
+
+- Apple
+- Amazon
+- Alphabet
+- Microsoft
+- NVIDIA
+
+### Features
+
+- Downloads historical adjusted closing prices from Yahoo Finance
+- Calculates daily percentage returns
+- Calculates annualised historical mean returns for each stock as estimates of expected return
+- Computes daily and annualised covariance matrices
+- Downloads the 3-month U.S. Treasury constant maturity rate (DGS3MO) from FRED
+- Uses the historical average 3-month Treasury rate as the annual risk-free rate proxy
+- Calculates an equal-weight portfolio as a benchmark
+- Defines reusable portfolio return and volatility functions
+- Uses SciPy's SLSQP optimisation method
+- Constrains portfolio weights to sum to 100%
+- Uses long-only portfolio weights between 0% and 100%
+- Calculates the minimum-volatility portfolio
+- Constructs the efficient frontier across 50 target returns
+- Calculates the maximum-Sharpe portfolio
+- Validates optimiser success and portfolio weight constraints
+- Recalculates portfolio metrics to verify optimisation results
+- Recreates the 100,000-portfolio Monte Carlo simulation from Project 10 for comparison
+- Compares Monte Carlo and directly optimised portfolio solutions
+- Compares return, volatility, Sharpe Ratio and individual stock weights
+- Produces an efficient frontier plot with the Monte Carlo portfolio cloud
+- Highlights the equal-weight, minimum-volatility and maximum-Sharpe portfolios
+- Shows both Monte Carlo and optimised portfolio locations on the same risk-return plot
+
+### Efficient Frontier
+
+The efficient frontier represents the portfolios that provide the lowest possible volatility for different levels of expected return under the model's constraints.
+
+For each target return, the optimiser searches for the combination of stock weights that minimises portfolio volatility while requiring the weights to sum to 100%.
+
+Repeating this optimisation across a range of target returns produces the efficient frontier.
+
+Portfolios below the frontier are inefficient because another portfolio can provide either a higher expected return for the same level of risk or lower risk for the same expected return.
+
+### Minimum-Volatility Portfolio
+
+The minimum-volatility portfolio is found by minimising:
+
+`Portfolio Volatility = √(wᵀΣw)`
+
+subject to the portfolio weights summing to 100% and each individual weight remaining between 0% and 100%.
+
+Unlike the equal-weight portfolio, the optimiser is free to change the allocation to each stock based on the historical covariance structure.
+
+In the example analysis, the optimised minimum-volatility portfolio produced:
+
+- Expected annual return: **26.24%**
+- Annualised volatility: **24.41%**
+- Sharpe Ratio: **0.9872**
+
+The resulting allocation was approximately:
+
+- Apple: **32.38%**
+- Amazon: **6.66%**
+- Alphabet: **27.10%**
+- Microsoft: **33.86%**
+- NVIDIA: **0.00%**
+
+### Maximum-Sharpe Portfolio
+
+The maximum-Sharpe portfolio identifies the allocation with the highest expected excess return relative to portfolio volatility.
+
+The Sharpe Ratio is calculated as:
+
+`Sharpe Ratio = (Portfolio Return - Risk-Free Rate) / Portfolio Volatility`
+
+Because SciPy performs minimisation, the negative Sharpe Ratio is used as the optimisation objective. Minimising the negative Sharpe Ratio is equivalent to maximising the Sharpe Ratio.
+
+In the example analysis, the optimised maximum-Sharpe portfolio produced:
+
+- Expected annual return: **51.29%**
+- Annualised volatility: **37.16%**
+- Sharpe Ratio: **1.3229**
+
+The resulting allocation was approximately:
+
+- Apple: **12.00%**
+- Amazon: **13.70%**
+- Alphabet: **10.34%**
+- Microsoft: **0.00%**
+- NVIDIA: **63.96%**
+
+### Monte Carlo vs Direct Optimisation
+
+The project recreates the 100,000 random portfolios from Project 10 and compares the best portfolios found through Monte Carlo simulation with the solutions produced by numerical optimisation.
+
+The Monte Carlo simulation searches a large number of randomly generated portfolio weights, while SciPy directly searches for an optimum subject to the specified constraints.
+
+For the maximum-Sharpe portfolio, the Monte Carlo simulation produced a Sharpe Ratio of approximately **1.3226**, compared with **1.3229** from direct optimisation.
+
+The two solutions are extremely close, demonstrating that the Monte Carlo simulation successfully approximated the optimal region while the numerical optimiser was able to locate a slightly better solution.
+
+The minimum-volatility results were also very similar, with approximately **24.42%** annualised volatility from the Monte Carlo simulation compared with **24.41%** from direct optimisation.
+
+This comparison provides a useful link between the two approaches. Monte Carlo simulation makes the portfolio opportunity set easy to visualise, while numerical optimisation provides a more direct method for locating specific optimal portfolios.
+
+### Financial Interpretation
+
+The efficient frontier demonstrates the trade-off between expected return and portfolio risk.
+
+Moving along the frontier towards higher expected returns requires accepting progressively higher volatility. The minimum-volatility portfolio sits at the lowest-risk point of the frontier, while the maximum-Sharpe portfolio represents the portfolio with the strongest expected risk-adjusted performance under the assumptions used in the analysis.
+
+The results also show that an optimal portfolio does not necessarily allocate capital evenly across every available stock. The optimiser can assign very small or zero weights to some holdings when other combinations provide a better risk-return trade-off.
+
+In this historical dataset, NVIDIA receives a large allocation in the maximum-Sharpe portfolio because of its unusually strong historical return, while it receives effectively zero weight in the minimum-volatility portfolio because including it does not reduce the minimum achievable portfolio volatility.
+
+These results should therefore be interpreted as historical optimisation rather than predictions of future optimal allocations. The model uses historical average returns and covariance as estimates of expected future behaviour, meaning the resulting portfolio weights are sensitive to the selected assets and historical period.
+
+### Validation
+
+Several checks are used to confirm that the optimisation and efficient frontier have been generated correctly.
+
+The program verifies that:
+
+- SciPy successfully completes the minimum-volatility optimisation
+- SciPy successfully completes the maximum-Sharpe optimisation
+- Optimised portfolio weights sum to 100%
+- Portfolio metrics recalculated from the optimal weights match the optimiser results
+- The efficient frontier contains no NaN values
+- The efficient frontier contains no infinite values
+- Target returns increase across the frontier
+- Volatility increases along the efficient portion of the frontier
+- All requested efficient frontier points are successfully generated
+
+The close agreement between the Monte Carlo and directly optimised portfolios provides an additional cross-check of the results.
+
+### Example Output
+
+![Efficient Frontier and Portfolio Optimisation](images/efficient_frontier.png)
+
+---
+
 # Technologies Used
 
 - Python
@@ -574,6 +721,7 @@ The recalculated values match the original results, providing a numerical cross-
 - yfinance
 - NumPy
 - pandas-datareader
+- SciPy
 
 ---
 
@@ -597,8 +745,6 @@ pip install -r requirements.txt
 
 Some ideas I'd like to add as I continue learning:
 
-- Efficient Frontier
-- Portfolio Optimisation
 - CAPM and Portfolio Beta
 - Factor Models (Fama-French)
 - Return and Risk Attribution
@@ -640,6 +786,7 @@ financial-data-analysis/
 ├── rolling_portfolio_risk.py
 ├── rolling_sharpe_ratio.py
 ├── monte_carlo_portfolio_simulation.py
+├── efficient_frontier.py
 │
 ├── requirements.txt
 ├── README.md
@@ -660,8 +807,7 @@ financial-data-analysis/
 - [x] Rolling Portfolio Risk
 - [x] Rolling Sharpe Ratio
 - [x] Monte Carlo Portfolio Weight Simulation
-- [ ] Efficient Frontier
-- [ ] Portfolio Optimisation
+- [x] Efficient Frontier and Portfolio Optimisation
 - [ ] CAPM and Portfolio Beta
 - [ ] Factor Models
 - [ ] Return and Risk Attribution
