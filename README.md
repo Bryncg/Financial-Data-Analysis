@@ -2,7 +2,7 @@
 
 A collection of Python projects exploring quantitative finance, portfolio analytics and financial data analysis using historical market data from sources including Yahoo Finance and FRED.
 
-This repository documents my progress as I learn Python for quantitative finance. Each project builds on the previous one, beginning with single-stock analysis before progressing into portfolio construction, performance attribution, risk analysis, correlation modelling, interactive financial dashboards, Monte Carlo portfolio simulation and, eventually, portfolio optimisation.
+This repository documents my progress as I learn Python for quantitative finance. Each project builds on the previous one, beginning with single-stock analysis before progressing into portfolio construction, performance attribution, risk analysis, correlation modelling, interactive financial dashboards, Monte Carlo simulation, portfolio optimisation and CAPM.
 
 # Projects
 
@@ -712,6 +712,190 @@ The close agreement between the Monte Carlo and directly optimised portfolios pr
 
 ---
 
+## 12. CAPM and Portfolio Beta (`CAPM_Beta.py`)
+
+Analyses the systematic market risk of five stocks using the Capital Asset Pricing Model (CAPM) and compares their historical returns with the returns predicted by CAPM.
+
+Building on the portfolio risk, covariance and optimisation concepts from previous projects, this project introduces beta as a measure of systematic market risk. Each stock's beta is calculated relative to the S&P 500 and is then used with a historical risk-free rate and market risk premium to calculate its CAPM expected return.
+
+The analysis uses:
+
+- Apple
+
+- Amazon
+
+- Alphabet
+
+- Microsoft
+
+- NVIDIA
+
+The S&P 500 is used as the market benchmark, while the 3-month U.S. Treasury constant maturity rate (DGS3MO) from FRED is used as the risk-free rate proxy.
+
+### Features
+
+- Downloads historical adjusted closing prices from Yahoo Finance
+
+- Uses the S&P 500 as the market benchmark
+
+- Downloads the 3-month U.S. Treasury constant maturity rate (DGS3MO) from FRED
+
+- Uses the historical average Treasury rate as the annual risk-free rate
+
+- Aligns stock and S&P 500 returns to the same trading dates
+
+- Calculates beta using stock-market covariance and market variance
+
+- Calculates the beta of an equal-weight portfolio
+
+- Calculates the historical annualised S&P 500 return
+
+- Calculates the historical market risk premium
+
+- Calculates CAPM expected returns for each stock
+
+- Calculates the CAPM expected return of the equal-weight portfolio
+
+- Compares historical annualised stock returns with CAPM expected returns
+
+- Calculates the return gap between historical and CAPM expected returns
+
+- Estimates alpha and beta independently using linear regression of daily excess returns
+
+- Annualises regression alpha for comparison with historical return differences
+
+- Validates covariance-based beta against regression-based beta
+
+- Validates the CAPM return gap against annualised regression alpha
+
+- Checks calculated beta, alpha and CAPM results for NaN and infinite values
+
+- Produces a Security Market Line comparing CAPM expected and historical returns
+
+### Beta
+
+Beta measures the sensitivity of a stock's returns to movements in the wider market.
+
+It is calculated as:
+
+`Beta = Cov(Stock Return, Market Return) / Var(Market Return)`
+
+A beta of 1 indicates that a stock has historically moved with approximately the same sensitivity as the market.
+
+A beta above 1 indicates greater sensitivity to market movements, while a beta below 1 indicates lower sensitivity.
+
+In the example analysis, NVIDIA produced the highest beta at approximately **1.76**, while the equal-weight portfolio produced a beta of approximately **1.29**.
+
+This suggests that both NVIDIA and the portfolio historically exhibited greater systematic market sensitivity than the S&P 500.
+
+### Capital Asset Pricing Model
+
+CAPM estimates the expected return of an asset based on its exposure to systematic market risk.
+
+The model is calculated as:
+
+`Expected Return = Risk-Free Rate + Beta × Market Risk Premium`
+
+where:
+
+`Market Risk Premium = Market Return - Risk-Free Rate`
+
+For the historical period analysed, the project calculated:
+
+- Historical average risk-free rate: **2.14%**
+
+- S&P 500 annualised return: **12.96%**
+
+- Market risk premium: **10.82%**
+
+The equal-weight portfolio had:
+
+- Portfolio beta: **1.2907**
+
+- CAPM expected return: **16.10%**
+
+### Historical Returns vs CAPM
+
+The project compares each stock's historical annualised return with the return predicted by CAPM.
+
+In the example analysis:
+
+- Apple: Historical **26.33%** vs CAPM **14.98%**
+
+- Amazon: Historical **30.01%** vs CAPM **14.89%**
+
+- Alphabet: Historical **26.44%** vs CAPM **14.55%**
+
+- Microsoft: Historical **25.38%** vs CAPM **14.91%**
+
+- NVIDIA: Historical **64.24%** vs CAPM **21.19%**
+
+All five stocks produced historical average returns above their CAPM expected returns during the selected period.
+
+The difference between historical return and CAPM expected return is displayed on the Security Market Line figure in percentage points.
+
+These differences describe historical performance relative to the return implied by the CAPM model and should not be interpreted as predictions of future outperformance.
+
+### Regression Alpha and Beta
+
+As an independent comparison, beta is also estimated using linear regression.
+
+Daily stock and S&P 500 returns are converted into excess returns by subtracting a daily risk-free rate. For each stock, the following regression is then estimated:
+
+`Stock Excess Return = Alpha + Beta × Market Excess Return + Error`
+
+The regression slope provides another estimate of beta, while the intercept represents daily alpha.
+
+Daily regression alpha is annualised using 252 trading days so that it can be compared with the annualised return figures used elsewhere in the analysis.
+
+### Validation
+
+The project uses two independent calculations to validate the CAPM results.
+
+Beta calculated using covariance and market variance is compared with beta estimated using linear regression. The two methods produce approximately identical results for all five stocks.
+
+The difference between historical annualised return and CAPM expected return is also compared with annualised regression alpha. Under the assumptions used in this analysis, the two calculations agree approximately.
+
+Additional validation checks confirm that:
+
+- Beta values contain no NaN or infinite values
+
+- Regression beta values contain no NaN or infinite values
+
+- CAPM expected returns contain no NaN or infinite values
+
+- Regression alpha values contain no NaN or infinite values
+
+- The equal-weight portfolio beta lies between the minimum and maximum individual stock betas
+
+### Security Market Line
+
+The Security Market Line visualises the relationship between systematic risk and the expected return predicted by CAPM.
+
+The figure displays:
+
+- CAPM expected returns as blue points
+
+- Historical annualised returns as orange stars
+
+- The equal-weight portfolio as a red point
+
+- The Security Market Line as a dashed green line
+
+- Grey vertical lines showing the difference between historical and CAPM expected returns
+
+- Ticker labels showing the historical return gap in percentage points
+
+Stocks positioned above the Security Market Line generated historical returns greater than those implied by their estimated beta under the CAPM assumptions used in the analysis.
+
+The figure therefore provides a visual comparison between historical realised performance and the return predicted from systematic market risk.
+
+### Example Output
+
+![CAPM and Portfolio Beta](images/CAPM_Beta.png)
+
+---
+
 # Technologies Used
 
 - Python
@@ -722,6 +906,7 @@ The close agreement between the Monte Carlo and directly optimised portfolios pr
 - NumPy
 - pandas-datareader
 - SciPy
+- scikit-learn
 
 ---
 
@@ -745,7 +930,6 @@ pip install -r requirements.txt
 
 Some ideas I'd like to add as I continue learning:
 
-- CAPM and Portfolio Beta
 - Factor Models (Fama-French)
 - Return and Risk Attribution
 - Principal Component Analysis (PCA)
@@ -787,6 +971,7 @@ financial-data-analysis/
 ├── rolling_sharpe_ratio.py
 ├── monte_carlo_portfolio_simulation.py
 ├── efficient_frontier.py
+├── CAPM_Beta.py
 │
 ├── requirements.txt
 ├── README.md
@@ -808,7 +993,7 @@ financial-data-analysis/
 - [x] Rolling Sharpe Ratio
 - [x] Monte Carlo Portfolio Weight Simulation
 - [x] Efficient Frontier and Portfolio Optimisation
-- [ ] CAPM and Portfolio Beta
+- [x] CAPM and Portfolio Beta
 - [ ] Factor Models
 - [ ] Return and Risk Attribution
 - [ ] Principal Component Analysis
