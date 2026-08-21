@@ -5,3 +5,4 @@ seaborn
 numpy
 pandas-datareader
 scipy
+scikit-learn
