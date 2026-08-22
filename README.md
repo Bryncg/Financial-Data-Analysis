@@ -896,6 +896,204 @@ The figure therefore provides a visual comparison between historical realised pe
 
 ---
 
+## 13. CAPM and Fama-French Factor Models (`factor_models.py`)
+
+Extends the single-factor CAPM framework by applying the Fama-French Three-Factor and Five-Factor models to explain the historical excess returns of five large technology and growth stocks.
+
+Building on the CAPM analysis from the previous project, this project examines whether additional systematic risk factors provide greater explanatory power than market exposure alone. CAPM, Fama-French Three-Factor and Fama-French Five-Factor regressions are estimated over the same matched sample so that their factor exposures, alpha and model fit can be compared directly.
+
+The analysis uses:
+
+- Apple
+- Amazon
+- Alphabet
+- Microsoft
+- NVIDIA
+
+Daily stock returns are obtained from Yahoo Finance, while daily Fama-French factor returns are obtained from Kenneth French's Data Library.
+
+### Models
+
+Three models are compared:
+
+**CAPM**
+
+`Rᵢ - Rf = α + βMKT(MKT - RF) + ε`
+
+**Fama-French Three-Factor Model**
+
+`Rᵢ - Rf = α + βMKT(MKT - RF) + βSMB(SMB) + βHML(HML) + ε`
+
+**Fama-French Five-Factor Model**
+
+`Rᵢ - Rf = α + βMKT(MKT - RF) + βSMB(SMB) + βHML(HML) + βRMW(RMW) + βCMA(CMA) + ε`
+
+where:
+
+- **MKT-RF** – Market excess return
+- **SMB** – Small Minus Big, representing the size factor
+- **HML** – High Minus Low, representing the value factor
+- **RMW** – Robust Minus Weak, representing the profitability factor
+- **CMA** – Conservative Minus Aggressive, representing the investment factor
+- **RF** – Risk-free rate
+- **Alpha** – Return not explained by the included factors
+
+### Features
+
+- Downloads historical adjusted stock prices from Yahoo Finance
+- Calculates daily stock returns
+- Imports daily Fama-French factor data from Kenneth French's Data Library
+- Converts Fama-French percentage returns into decimal returns
+- Converts factor dates into a common datetime index
+- Aligns stock returns and factor data using common trading dates
+- Calculates daily stock excess returns above the risk-free rate
+- Estimates CAPM using market excess returns
+- Estimates the Fama-French Three-Factor model
+- Estimates the Fama-French Five-Factor model
+- Calculates annualised regression alpha
+- Calculates market beta for all three models
+- Calculates SMB and HML factor loadings
+- Calculates RMW and CMA factor loadings for the Five-Factor model
+- Calculates R² for each regression
+- Calculates adjusted R² to account for the different number of explanatory factors
+- Compares CAPM, FF3 and FF5 alpha
+- Measures improvements in adjusted R² between models
+- Measures changes in alpha as additional factors are introduced
+- Produces separate FF3 and FF5 factor-exposure charts
+- Produces CAPM vs FF3 and CAPM vs FF3 vs FF5 model-comparison charts
+- Performs numerical validation of the regression inputs and outputs
+
+### Factor Exposures
+
+Factor loadings measure how strongly each stock's excess returns are historically associated with each systematic factor.
+
+A positive loading indicates that the stock has historically moved in the same direction as the factor, while a negative loading indicates an inverse exposure.
+
+Across the sample, all five stocks produced market betas above 1, indicating greater historical sensitivity to market movements than the market factor itself.
+
+NVIDIA displayed the largest market exposure, with a market beta of approximately **1.67** under both the Three-Factor and Five-Factor models.
+
+The stocks generally produced negative SMB and HML loadings. This is consistent with the sample being dominated by large growth-oriented companies rather than small-cap or value stocks.
+
+The Five-Factor model additionally estimates profitability and investment exposures through RMW and CMA.
+
+### Model Comparison
+
+The project compares how much of each stock's daily excess-return variation is explained by progressively richer factor models.
+
+The resulting R² values were:
+
+| Stock | CAPM R² | FF3 R² | FF5 R² |
+| --- | ---: | ---: | ---: |
+| Apple | 0.535 | 0.576 | 0.599 |
+| Amazon | 0.413 | 0.509 | 0.543 |
+| Alphabet | 0.488 | 0.537 | 0.561 |
+| Microsoft | 0.576 | 0.661 | 0.680 |
+| NVIDIA | 0.431 | 0.508 | 0.510 |
+
+The Fama-French Three-Factor model improves explanatory power over CAPM for every stock in the sample.
+
+Adding profitability and investment factors through the Five-Factor model produces a further improvement for every stock, although the size of that improvement varies considerably.
+
+For NVIDIA, R² increases substantially from approximately **0.431 under CAPM to 0.508 under FF3**, but only increases to approximately **0.510 under FF5**.
+
+By contrast, the Five-Factor model provides more noticeable additional explanatory power for stocks such as Apple, Amazon, Alphabet and Microsoft.
+
+### Adjusted R²
+
+Because adding explanatory variables will generally increase ordinary R² even when their contribution is small, adjusted R² is also calculated.
+
+Adjusted R² penalises the model for including additional explanatory variables and therefore provides a more appropriate comparison between CAPM, FF3 and FF5.
+
+The Five-Factor model still produces higher adjusted R² values than the Three-Factor model across the analysed stocks, indicating that the additional RMW and CMA factors provide enough explanatory information to offset the penalty for increased model complexity.
+
+However, the improvement from FF3 to FF5 is generally smaller than the improvement from CAPM to FF3.
+
+This demonstrates the idea of diminishing improvements in explanatory power as additional factors are introduced.
+
+### Alpha
+
+Regression alpha represents the average excess return that is not explained by the factors included in the model.
+
+Daily regression intercepts are annualised using 252 trading days to make the values easier to interpret.
+
+As additional factors are introduced, alpha generally falls because a larger portion of historical return variation is attributed to systematic factor exposures rather than the regression intercept.
+
+For example, Apple's annualised alpha changes from approximately:
+
+- CAPM: **9.27%**
+- FF3: **8.44%**
+- FF5: **7.42%**
+
+Microsoft similarly falls from approximately:
+
+- CAPM: **6.99%**
+- FF3: **5.79%**
+- FF5: **5.17%**
+
+NVIDIA remains unusual because of its exceptionally large historical alpha:
+
+- CAPM: **40.35%**
+- FF3: **40.52%**
+- FF5: **40.17%**
+
+This indicates that the included Fama-French factors explain only a limited portion of NVIDIA's unusually strong historical excess performance during the selected sample.
+
+These alpha values describe historical regression results and should not be interpreted as expected future abnormal returns.
+
+### Financial Interpretation
+
+The project demonstrates why a stock's return behaviour cannot always be adequately described using market beta alone.
+
+CAPM attributes excess returns entirely to exposure to the market risk premium. The Fama-French models extend this framework by allowing returns to also be associated with systematic differences in company size, valuation characteristics, profitability and investment behaviour.
+
+The increase in R² from CAPM to FF3 and FF5 shows that these additional factors explain some return variation that market beta alone does not capture.
+
+However, even the Five-Factor model leaves a substantial proportion of daily return variation unexplained. An R² of 0.510, for example, means that approximately 51% of the variation in the dependent variable is explained by the regression model within the sample, while the remainder is left in the residual component.
+
+The comparison also demonstrates that a more complicated model does not automatically provide a proportionally better explanation. FF5 contains two additional factors relative to FF3, but the improvement in explanatory power is considerably smaller for some stocks.
+
+This is particularly visible for NVIDIA, where FF3 explains substantially more variation than CAPM, while RMW and CMA add very little additional explanatory power.
+
+### Validation
+
+The project includes several checks to confirm that the factor regressions and model comparisons have been constructed correctly.
+
+The program verifies that:
+
+- Stock and factor datasets contain common matched dates
+- Regression inputs contain no NaN or infinite values
+- CAPM regression coefficients and intercepts are finite
+- FF3 regression coefficients and intercepts are finite
+- FF5 regression coefficients and intercepts are finite
+- R² values are finite
+- Adjusted R² values are finite
+- Alpha calculations are finite
+- RMW and CMA factor loadings contain valid values
+- Predicted return matrices match the dimensions of the observed excess-return matrices
+
+The final matched dataset contains **2,888 daily observations** from **2015-01-05 to 2026-06-30**.
+
+### Example Output
+
+#### Fama-French Three-Factor Exposures
+
+![Fama-French Three-Factor Exposures](images/factor_models_ff3.png)
+
+#### Fama-French Five-Factor Exposures
+
+![Fama-French Five-Factor Exposures](images/factor_models_ff5.png)
+
+#### CAPM vs Fama-French Three-Factor Model
+
+![CAPM vs Fama-French Three-Factor R2 Comparison](images/CAPM_vs_FF3_R2.png)
+
+#### CAPM vs Fama-French Three- and Five-Factor Models
+
+![CAPM vs Fama-French Model Comparison](images/CAPM_vs_FF3_vs_FF5_R2.png)
+
+---
+
 # Technologies Used
 
 - Python
@@ -914,6 +1112,7 @@ The figure therefore provides a visual comparison between historical realised pe
 
 - Yahoo Finance
 - FRED
+- Kenneth French Data Library
 
 ---
 
@@ -930,7 +1129,6 @@ pip install -r requirements.txt
 
 Some ideas I'd like to add as I continue learning:
 
-- Factor Models (Fama-French)
 - Return and Risk Attribution
 - Principal Component Analysis (PCA)
 - Cointegration and Pairs Trading
@@ -972,6 +1170,7 @@ financial-data-analysis/
 ├── monte_carlo_portfolio_simulation.py
 ├── efficient_frontier.py
 ├── CAPM_Beta.py
+├── factor_models.py
 │
 ├── requirements.txt
 ├── README.md
@@ -994,7 +1193,7 @@ financial-data-analysis/
 - [x] Monte Carlo Portfolio Weight Simulation
 - [x] Efficient Frontier and Portfolio Optimisation
 - [x] CAPM and Portfolio Beta
-- [ ] Factor Models
+- [x] CAPM and Fama-French Factor Models
 - [ ] Return and Risk Attribution
 - [ ] Principal Component Analysis
 - [ ] Cointegration and Pairs Trading
