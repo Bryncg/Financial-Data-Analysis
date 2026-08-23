@@ -587,13 +587,13 @@ assert np.isfinite(
 
 model_comparison_display = pd.DataFrame(
     {
-        "CAPM  Alpha": capm_results["Alpha"].map("{:.2%}".format),
-        "FF3  Alpha": ff3_results["Alpha"].map("{:.2%}".format),
-        "FF5  Alpha": ff5_results["Alpha"].map("{:.2%}".format),
+        "CAPM Alpha": capm_results["Alpha"].map("{:.2%}".format),
+        "FF3 Alpha": ff3_results["Alpha"].map("{:.2%}".format),
+        "FF5 Alpha": ff5_results["Alpha"].map("{:.2%}".format),
 
-        "CAPM  R^2": capm_results["R^2"].map("{:.3f}".format),
-        "FF3  R^2": ff3_results["R^2"].map("{:.3f}".format),
-        "FF5  R^2": ff5_results["R^2"].map("{:.3f}".format),
+        "CAPM R^2": capm_results["R^2"].map("{:.3f}".format),
+        "FF3 R^2": ff3_results["R^2"].map("{:.3f}".format),
+        "FF5 R^2": ff5_results["R^2"].map("{:.3f}".format),
     },
     index=excess_returns_ff3.columns,
 )
