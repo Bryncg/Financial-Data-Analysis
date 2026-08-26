@@ -231,7 +231,7 @@ plt.figure(figsize=(12, 6))
 
 plt.plot(
     portfolio_values,
-    label="Equal-Weight Portfolio",
+    label="Daily-Rebalanced Equal-Weight Portfolio",
 )
 
 plt.plot(

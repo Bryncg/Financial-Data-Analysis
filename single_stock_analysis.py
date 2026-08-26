@@ -22,7 +22,7 @@ closing_prices = data["Close"][ticker].dropna()
 # Calculate daily and monthly returns
 daily_returns = closing_prices.pct_change().dropna()
 
-Monthly_returns = (
+monthly_returns = (
     closing_prices
     .resample("ME")
     .ffill()
@@ -40,7 +40,7 @@ number_of_years = (
 # Calculate return and volatility
 annualised_volatility = daily_returns.std() * (252 ** 0.5)
 
-annulised_return = (
+annualised_return = (
     closing_prices.iloc[-1] / closing_prices.iloc[0]
 ) ** (1 / number_of_years) - 1
 
@@ -83,23 +83,23 @@ print(
 )
 
 print(f"Annualised Volatility: {annualised_volatility:.2%}")
-print("\nAnnualised Return: {:.2%}".format(annulised_return))
+print("\nAnnualised Return: {:.2%}".format(annualised_return))
 
 print(
-    "\nWorst Month: {:.2%}".format(Monthly_returns.min()),
-    f"occurred on {Monthly_returns.idxmin().strftime('%Y-%m')}",
+    "\nWorst Month: {:.2%}".format(monthly_returns.min()),
+    f"occurred on {monthly_returns.idxmin().strftime('%Y-%m')}",
 )
 
 print(
-    "Best Month: {:.2%}".format(Monthly_returns.max()),
-    f"occurred on {Monthly_returns.idxmax().strftime('%Y-%m')}",
+    "Best Month: {:.2%}".format(monthly_returns.max()),
+    f"occurred on {monthly_returns.idxmax().strftime('%Y-%m')}",
 )
 
 
 # Plot the historical closing price
 closing_prices.plot(figsize=(12, 6))
 
-plt.title("NVIDIA Share Price")
+plt.title(f"{ticker} Share Price")
 plt.xlabel("Date")
 plt.ylabel("Price (USD)")
 plt.show()
