@@ -1194,7 +1194,7 @@ financial-data-analysis/
 - [x] Efficient Frontier and Portfolio Optimisation
 - [x] CAPM and Portfolio Beta
 - [x] CAPM and Fama-French Factor Models
-- [ ] Portfolio Return and Risk Attribution
+- [x] Portfolio Return and Risk Attribution
 - [ ] Value at Risk (VaR) and Expected Shortfall
 - [ ] Principal Component Analysis
 - [ ] Cointegration and Pairs Trading
