@@ -1094,6 +1094,235 @@ The final matched dataset contains **2,888 daily observations** from **2015-01-0
 
 ---
 
+
+## 14. Portfolio Return and Risk Attribution (`return_and_risk_attribution.py`)
+
+Extends the portfolio optimisation analysis by examining how individual stocks contribute to both portfolio return and portfolio risk.
+
+Rather than evaluating an optimised portfolio using the same historical data used to construct it, the project separates the data into an estimation period and an out-of-sample testing period. Portfolio weights are determined using data before 2024 and then held fixed when evaluating performance from 2024 onwards.
+
+Three portfolios are compared:
+
+- Minimum Volatility Portfolio
+- Maximum Sharpe Portfolio
+- Equal Weight Portfolio
+
+The analysis uses:
+
+- Apple
+- Amazon
+- Alphabet
+- Microsoft
+- NVIDIA
+
+The 3-month U.S. Treasury constant maturity rate (DGS3MO) from FRED is used as the risk-free rate proxy.
+
+### Estimation and Out-of-Sample Testing
+
+Historical stock returns are divided into two periods:
+
+- Estimation period: 2015 to the end of 2023
+- Out-of-sample period: 2024 onwards
+
+The estimation period is used to calculate expected returns, covariance and the portfolio weights for the minimum-volatility and maximum-Sharpe portfolios.
+
+Once these weights have been calculated, they are kept fixed for the out-of-sample analysis. This prevents future return information from being used when constructing the portfolios and provides a more realistic test of how the historically optimised allocations behave on unseen data.
+
+The equal-weight portfolio uses a 20% allocation to each stock and provides a benchmark against the two optimised portfolios.
+
+### Features
+
+- Downloads historical adjusted stock prices from Yahoo Finance
+- Downloads the 3-month U.S. Treasury constant maturity rate (DGS3MO) from FRED
+- Separates historical data into estimation and out-of-sample periods
+- Calculates annualised stock returns and covariance matrices
+- Defines reusable portfolio return and volatility functions
+- Constructs an equal-weight benchmark portfolio
+- Uses SciPy SLSQP optimisation
+- Calculates the minimum-volatility portfolio
+- Calculates the maximum-Sharpe portfolio
+- Uses long-only portfolio weights between 0% and 100%
+- Constrains portfolio weights to sum to 100%
+- Freezes the estimated portfolio weights for out-of-sample evaluation
+- Calculates out-of-sample return, volatility and Sharpe Ratio
+- Compares estimated and out-of-sample portfolio performance
+- Calculates stock-level return contributions
+- Calculates marginal risk contributions
+- Calculates component risk contributions
+- Calculates percentage risk contributions
+- Compares portfolio weights with percentage risk contributions
+- Produces formatted attribution tables for all three portfolios
+- Calculates cumulative out-of-sample portfolio performance
+- Performs numerical validation of portfolio weights, return attribution and risk attribution
+
+### Portfolio Allocations
+
+The minimum-volatility portfolio allocated approximately:
+
+- Apple: **31.01%**
+- Amazon: **8.11%**
+- Alphabet: **30.82%**
+- Microsoft: **30.05%**
+- NVIDIA: **0.00%**
+
+The maximum-Sharpe portfolio allocated approximately:
+
+- Apple: **7.25%**
+- Amazon: **18.02%**
+- Alphabet: **0.00%**
+- Microsoft: **14.61%**
+- NVIDIA: **60.12%**
+
+The equal-weight portfolio allocates **20%** to each stock.
+
+The difference between the portfolios shows how the optimisation objective affects the resulting allocation. The minimum-volatility portfolio removes NVIDIA from the allocation, while the maximum-Sharpe portfolio assigns the majority of its capital to NVIDIA because of its strong historical return relative to risk during the estimation period.
+
+### Estimated vs Out-of-Sample Performance
+
+The portfolios are first evaluated using the estimation data and then evaluated again using the out-of-sample period without recalculating their weights.
+
+| Portfolio | Estimated Return | OOS Return | Estimated Volatility | OOS Volatility | Estimated Sharpe | OOS Sharpe |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Minimum Volatility | 26.54% | 25.77% | 25.19% | 21.52% | 0.996 | 0.990 |
+| Maximum Sharpe | 49.67% | 50.26% | 36.71% | 34.95% | 1.313 | 1.310 |
+| Equal Weight | 34.51% | 34.37% | 27.67% | 24.19% | 1.194 | 1.236 |
+
+The estimated and out-of-sample annualised returns remained relatively close for all three portfolios.
+
+Realised out-of-sample volatility was lower than the estimation-period volatility for each portfolio. The minimum-volatility portfolio continued to produce the lowest volatility, while the maximum-Sharpe portfolio continued to produce the highest return and Sharpe Ratio.
+
+#### Annualised Return
+
+![Estimated vs OOS Annualised Portfolio Return](images/Estimated_vs_OOS_Annualised_Portfolio_Return.png)
+
+#### Annualised Volatility
+
+![Estimated vs OOS Annualised Portfolio Volatility](images/Estimated_vs_OOS_Annualised_Portfolio_Vol.png)
+
+#### Sharpe Ratio
+
+![Estimated vs OOS Portfolio Sharpe Ratio](images/Estimated_vs_OOS_Annualised_Portfolio_Sharpe.png)
+
+### Return Attribution
+
+Portfolio return can be separated into the contribution made by each individual stock.
+
+For each stock:
+
+`Return Contribution = Portfolio Weight × Stock Return`
+
+The individual stock contributions therefore sum to the annualised return of the complete portfolio.
+
+For the minimum-volatility portfolio, the largest out-of-sample return contributions were:
+
+- Alphabet: **+11.98 percentage points**
+- Apple: **+7.09 percentage points**
+- Microsoft: **+4.67 percentage points**
+- Amazon: **+2.03 percentage points**
+- NVIDIA: **+0.00 percentage points**
+
+For the maximum-Sharpe portfolio, NVIDIA contributed approximately **+41.82 percentage points** of the portfolio's **50.26%** annualised out-of-sample return.
+
+The equal-weight portfolio produced more distributed return contributions, although NVIDIA remained the largest individual contributor at approximately **+13.91 percentage points**.
+
+![Out-of-Sample Return Contribution by Stock](images/Return_Contribution_by_Stock_OOS.png)
+
+### Risk Attribution
+
+Portfolio volatility is calculated from the covariance matrix using:
+
+`Portfolio Volatility = √(wᵀΣw)`
+
+Risk attribution then separates this portfolio-level volatility into contributions from the individual holdings.
+
+Marginal Risk Contribution measures how sensitive total portfolio volatility is to a small change in an asset's portfolio weight:
+
+`MRCᵢ = (Σw)ᵢ / σₚ`
+
+Component Risk Contribution combines this sensitivity with the asset's current portfolio weight:
+
+`CRCᵢ = wᵢ × MRCᵢ`
+
+Percentage Risk Contribution expresses each component contribution as a proportion of total portfolio volatility:
+
+`PRCᵢ = CRCᵢ / σₚ`
+
+The component risk contributions sum to total portfolio volatility, while the percentage risk contributions sum to 100%.
+
+### Portfolio Weight vs Risk Contribution
+
+The analysis demonstrates that portfolio weight and portfolio risk contribution are not necessarily equal.
+
+This is particularly clear in the maximum-Sharpe portfolio. NVIDIA received approximately **60.12%** of the portfolio weight but accounted for approximately **80.89%** of total portfolio risk.
+
+![Maximum Sharpe Portfolio Weight vs Risk Contribution](images/Weight_vs_Risk_Contribution_max_sharpe.png)
+
+The equal-weight portfolio demonstrates the same principle. Despite every stock receiving a 20% capital allocation, the percentage risk contributions were approximately:
+
+- Apple: **14.05%**
+- Amazon: **21.23%**
+- Alphabet: **18.14%**
+- Microsoft: **15.62%**
+- NVIDIA: **30.97%**
+
+This reinforces the result from the earlier Portfolio Variance and Risk Contribution project: equal capital allocation does not produce equal risk allocation.
+
+### Out-of-Sample Cumulative Performance
+
+Daily portfolio returns are calculated during the out-of-sample period using the fixed target weights determined before the test period.
+
+The cumulative return is then calculated by compounding the daily portfolio returns through time.
+
+![Out-of-Sample Cumulative Portfolio Performance](images/OOS_Cumulative_Performance.png)
+
+The maximum-Sharpe portfolio produced the strongest cumulative performance over the out-of-sample period, but also experienced substantially larger fluctuations.
+
+This is consistent with its concentrated NVIDIA allocation and the large proportion of total portfolio risk attributed to NVIDIA.
+
+The equal-weight portfolio produced an intermediate result, while the minimum-volatility portfolio followed a less volatile path.
+
+Because the daily portfolio return series applies the same target weights throughout the out-of-sample period, this represents portfolios maintained at their target allocations rather than a pure buy-and-hold strategy where portfolio weights are allowed to drift over time.
+
+### Financial Interpretation
+
+The project demonstrates that portfolio performance cannot be fully understood from total return and volatility alone.
+
+Return attribution identifies which holdings generated the portfolio's return, while risk attribution identifies which holdings were responsible for the portfolio's overall volatility.
+
+The maximum-Sharpe portfolio provides the clearest example. Although it produced the strongest return and risk-adjusted performance, both its return and its risk were heavily concentrated in NVIDIA. Approximately 60% of the portfolio capital generated more than 80% of total portfolio risk.
+
+The minimum-volatility portfolio produced a much more balanced distribution of risk and completely excluded NVIDIA. Its lower overall volatility came at the cost of substantially lower returns than the maximum-Sharpe portfolio during the out-of-sample period.
+
+The equal-weight portfolio provides a useful benchmark between these approaches. Capital was distributed equally across all five stocks, but risk was not. Differences in individual stock volatility and covariance caused some holdings to contribute considerably more risk than others.
+
+The comparison therefore demonstrates an important distinction between capital diversification and risk diversification. A portfolio can appear diversified based on its weights while still having a large proportion of its total risk concentrated in a single holding.
+
+The results are based on historical data and should not be interpreted as predictions of future portfolio performance.
+
+### Validation
+
+Several numerical checks are used throughout the project to confirm that the portfolio optimisation and attribution calculations are internally consistent.
+
+The program verifies that:
+
+- Minimum-volatility portfolio weights sum to 100%
+- Maximum-Sharpe portfolio weights sum to 100%
+- Equal-weight portfolio weights sum to 100%
+- Optimised portfolio weights remain within the long-only constraints
+- SciPy successfully completes both portfolio optimisations
+- Return contributions sum to the corresponding annualised out-of-sample portfolio return
+- Component risk contributions sum to total portfolio volatility
+- Percentage risk contributions sum to 100%
+- Risk-attribution volatility matches the portfolio volatility calculated independently from the out-of-sample covariance matrix
+
+The program completes with a final validation message when all checks pass:
+
+`All final validation checks passed.`
+
+### Example Outputs
+
+The figures above summarise the main results of the project. Additional weight-versus-risk contribution figures for the minimum-volatility and equal-weight portfolios are also generated by the analysis.
+
 # Technologies Used
 
 - Python
@@ -1129,7 +1358,7 @@ pip install -r requirements.txt
 
 Some ideas I'd like to add as I continue learning:
 
-- Return and Risk Attribution
+- Value at Risk (VaR) and Expected Shortfall
 - Principal Component Analysis (PCA)
 - Cointegration and Pairs Trading
 - Options Fundamentals
@@ -1171,6 +1400,7 @@ financial-data-analysis/
 ├── efficient_frontier.py
 ├── CAPM_Beta.py
 ├── factor_models.py
+├── return_and_risk_attribution.py
 │
 ├── requirements.txt
 ├── README.md
