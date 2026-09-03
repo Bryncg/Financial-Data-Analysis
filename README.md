@@ -1515,19 +1515,19 @@ The program completes with a final validation message when all checks pass:
 
 #### Portfolio Return Distribution and VaR Thresholds
 
-![Portfolio Return Distribution and VaR Thresholds](images/Portfolio_Return_Distribution_VaR.png)
+![Portfolio Return Distribution and VaR Thresholds](images/Portfolio_Return_Distribution_and_VaR_Thresholds.png)
 
 #### VaR and Expected Shortfall Method Comparison
 
-![VaR and Expected Shortfall Method Comparison](images/VaR_ES_Method_Comparison.png)
+![VaR and Expected Shortfall Method Comparison](images/Historical_vs_Parametric_vs_Monte_Carlo_VaR_and_ES.png)
 
 #### Out-of-Sample VaR Backtest
 
-![Out-of-Sample VaR Backtest](images/Out_of_Sample_VaR_Backtest.png)
+![Out-of-Sample VaR Backtest](images/OOS_VaR_Backtest.png)
 
 #### VaR Breach Rate Comparison
 
-![VaR Breach Rate Comparison](images/VaR_Breach_Rate_Comparison.png)
+![VaR Breach Rate Comparison](images/Observed_vs_Expected_Breach_Rates.png)
 
 ---
 
