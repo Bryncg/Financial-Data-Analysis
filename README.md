@@ -2,7 +2,7 @@
 
 A collection of Python projects exploring quantitative finance, portfolio analytics and financial data analysis using historical market data from sources including Yahoo Finance and FRED.
 
-This repository documents my progress as I learn Python for quantitative finance. Each project builds on the previous one, beginning with single-stock analysis before progressing into portfolio construction, performance attribution, risk analysis, correlation modelling, interactive financial dashboards, Monte Carlo simulation, portfolio optimisation and CAPM.
+This repository documents my progress as I learn Python for quantitative finance. Each project builds on the previous one, beginning with single-stock analysis before progressing into portfolio construction, risk analysis, correlation and covariance modelling, Monte Carlo simulation, portfolio optimisation, factor models, return and risk attribution, tail-risk analysis and principal component analysis.
 
 # Projects
 
@@ -1531,6 +1531,236 @@ The program completes with a final validation message when all checks pass:
 
 ---
 
+---
+
+## 16. Principal Component Analysis (`principal_component_analysis.py`)
+
+Uses Principal Component Analysis (PCA) to examine how much of the movement across a diversified group of stocks can be explained by a smaller number of common components.
+
+Building on the earlier correlation, covariance and portfolio risk projects, this project looks at the dimensional structure behind stock returns rather than analysing each relationship separately.
+
+The analysis uses 18 stocks across several areas of the market:
+
+- Technology: NVIDIA, Apple, Microsoft
+- Financials: JPMorgan Chase, Bank of America, Berkshire Hathaway
+- Healthcare: Johnson & Johnson, UnitedHealth Group, Pfizer
+- Energy: Exxon Mobil, Chevron, BP
+- Consumer: Amazon, Walmart, Coca-Cola
+- Industrials / Defence: Caterpillar, General Electric, Lockheed Martin
+
+### Standardising Returns
+
+The stocks have different levels of volatility, meaning PCA performed directly on raw returns can give more influence to stocks with larger return movements.
+
+Before the main PCA model is fitted, each stock's daily returns are therefore standardised so that they have approximately:
+
+- Mean = 0
+- Standard deviation = 1
+
+This allows the PCA model to focus more directly on the relationships between the stocks rather than allowing differences in volatility alone to dominate the components.
+
+The project later compares this standardised PCA with PCA fitted directly to raw returns.
+
+### Explained Variance
+
+PCA creates new uncorrelated principal components ordered by how much variation they explain.
+
+In the full-sample standardised PCA:
+
+- PC1 explains approximately **40.3%** of total variance
+- PC2 explains approximately **10.5%**
+- PC3 explains approximately **8.8%**
+
+The minimum number of components required to explain different proportions of the total variance was:
+
+- **8 PCs** for approximately **80.6%**
+- **12 PCs** for approximately **91.4%**
+- **14 PCs** for approximately **95.6%**
+
+This shows that the 18 original stock return series contain a reasonable amount of shared information, although several components are still required to describe most of the variation.
+
+### Component Weights
+
+The component weights show how strongly each stock contributes to each principal component.
+
+PC1 contains positive weights across all 18 stocks, suggesting that it resembles a broad common market movement rather than being dominated by one individual sector.
+
+PC2 shows a clearer contrast between different groups. Technology and growth stocks including Amazon, Microsoft, NVIDIA and Apple have positive weights, while Exxon Mobil, BP and Chevron have large negative weights.
+
+This means PC2 resembles a technology/growth versus energy pattern within this dataset.
+
+PC3 has larger positive weights in stocks including Johnson & Johnson, Coca-Cola, Pfizer and Walmart, while several growth and cyclical stocks have negative weights.
+
+These components are statistical patterns discovered by PCA rather than predefined economic factors, so the sector interpretations are used only to describe the patterns visible in the component weights.
+
+### Reconstruction Error
+
+The principal component scores are used to reconstruct the original standardised stock returns using different numbers of components.
+
+Reconstruction error falls as additional principal components are included.
+
+The reconstruction error was approximately:
+
+- **0.194** using 8 PCs
+- **0.086** using 12 PCs
+- **0.044** using 14 PCs
+- Effectively **0** using all 18 PCs
+
+The reconstruction results closely match the amount of variance discarded at each threshold.
+
+For example, 8 PCs retain approximately 80.6% of total variance and produce a reconstruction error of approximately 19.4%.
+
+Using all 18 components reconstructs the original standardised dataset almost perfectly.
+
+### Raw vs Standardised PCA
+
+A second PCA model is fitted directly to the original daily returns without standardising their volatility.
+
+This allows the effect of scaling to be compared.
+
+PC1 explains a similar amount of total variance in both models:
+
+- Raw PCA: approximately **40.7%**
+- Standardised PCA: approximately **40.3%**
+
+The difference becomes larger in later components. Raw PC2 explains approximately **14.9%**, compared with approximately **10.5%** after standardisation.
+
+The PC1 component weights also change considerably for some stocks.
+
+NVIDIA provides the clearest example:
+
+- Raw PC1 weight: approximately **0.412**
+- Standardised PC1 weight: approximately **0.183**
+
+NVIDIA has the highest volatility in the dataset, so preserving the original return scale gives it considerably more influence in the raw PCA.
+
+The comparison demonstrates why the choice between covariance-based PCA and standardised PCA can change the structure identified by the model.
+
+### Rolling PCA
+
+The project also applies PCA through time using a **252-trading-day rolling window**.
+
+Each rolling window is standardised separately before fitting a new PCA model.
+
+This avoids using the mean and standard deviation of the complete dataset when analysing an earlier period and allows the structure of the stock returns to change through time.
+
+The rolling analysis tracks:
+
+- The percentage of variance explained by PC1
+- The number of PCs required to explain 80%, 90% and 95% of variance
+
+PC1 explained variance changes substantially across the sample.
+
+During the 2020 market disruption, PC1 increased to approximately **67%** of total variance. This suggests that a much larger proportion of stock movement was concentrated in one common statistical component during that period.
+
+By the end of the dataset, PC1 explains approximately **18.4%**, showing that the return structure had become much less concentrated in a single component.
+
+The rolling dimensionality analysis shows the same effect from another direction.
+
+During the highly concentrated 2020 period, only **4 principal components** were required to explain at least 80% of variance.
+
+By the end of the dataset, **10 principal components** were required to reach the same 80% threshold.
+
+The US-China trade dispute and COVID-19 pandemic are marked on the rolling PC1 figure as historical context. These event markers are not treated as proof that the events caused the PCA changes, particularly because each PCA result represents the previous 252 trading days.
+
+### Features
+
+- Downloads historical adjusted stock prices from Yahoo Finance
+- Calculates daily percentage returns for 18 stocks
+- Checks and removes missing return observations
+- Calculates the correlation structure of the stock returns
+- Compares stock return volatility before PCA
+- Standardises each stock's returns to approximately zero mean and unit variance
+- Fits an 18-component PCA model
+- Calculates individual explained variance ratios
+- Calculates cumulative explained variance
+- Identifies the number of PCs required to explain 80%, 90% and 95% of variance
+- Extracts and ranks PCA component weights
+- Compares the first three principal components
+- Produces a PC1-PC8 component-weight heatmap
+- Reconstructs the standardised return dataset using different numbers of PCs
+- Calculates reconstruction error
+- Compares PCA using raw and standardised returns
+- Compares raw and standardised PC1 component weights
+- Performs PCA using a rolling 252-trading-day window
+- Standardises each rolling window independently
+- Tracks rolling PC1 explained variance
+- Calculates rolling 80%, 90% and 95% dimensionality thresholds
+- Annotates selected historical market events
+- Performs numerical validation of the PCA results
+
+### Financial Interpretation
+
+PCA provides another way of looking at diversification and common market risk.
+
+Correlation and covariance measure relationships between individual assets, while PCA summarises these relationships into a smaller number of independent statistical components.
+
+The full-sample results show that one broad component explains a large part of the movement across the 18 stocks, but the remaining variation is spread across several additional components.
+
+The rolling results show that this structure is not constant through time.
+
+During periods where PC1 becomes more dominant, fewer principal components are required to explain most of the stock return variation. During periods where PC1 becomes less important, the return structure is spread across more dimensions.
+
+The project also shows why preprocessing matters. Performing PCA directly on raw returns allows differences in stock volatility to influence the components, while standardising the returns gives each stock an equal variance before PCA is fitted.
+
+PCA does not identify economic factors automatically. The components are mathematical directions that explain variation in the data, and any economic interpretation of their weights should therefore be treated cautiously.
+
+### Validation
+
+Several numerical checks are used to confirm that the PCA calculations are internally consistent.
+
+The program verifies that:
+
+- Explained variance ratios sum to approximately 100%
+- Cumulative explained variance only increases
+- Cumulative explained variance finishes at approximately 100%
+- Principal component vectors are orthogonal
+- Transformed principal component scores are approximately uncorrelated
+- Reconstruction error decreases as additional PCs are included
+- Reconstruction error approaches zero when all 18 PCs are used
+- Rolling PCA outputs contain the same number of dates and results
+- Rolling PCA outputs contain no NaN values
+- Rolling PC1 explained variance remains between 0 and 1
+- Rolling component counts remain between 1 and 18
+- The number of components required for 80% variance never exceeds the number required for 90% or 95%
+- Rolling PCA dates remain in chronological order
+
+The program completes with a final validation message when all checks pass:
+
+`All PCA validation checks passed.`
+
+### Example Outputs
+
+#### PCA Explained Variance
+
+![PCA Explained Variance Scree Plot](images/PCA_Explained_Variance_Scree_Plot.png)
+
+#### PC1-PC8 Component Weights
+
+![PCA Component Weights PC1-PC8](images/PCA_Component_Weights_PC1_PC8.png)
+
+#### PC1-PC3 Component Weights
+
+![PCA Component Weights PC1-PC3](images/PC1_PC3_Component_Weights.png)
+
+#### Reconstruction Error
+
+![PCA Reconstruction Error](images/PCA_Reconstruction_Error.png)
+
+#### Raw vs Standardised PCA
+
+![Raw vs Standardised PCA](images/Explained_variance_comparison.png)
+
+#### Rolling PC1 Explained Variance
+
+![Rolling PCA PC1 Explained Variance](images/Rolling_252_Day_Window_PCA_PC1_Explained_Variance.png)
+
+#### Rolling PCs Required for 80% Variance
+
+![Rolling PCA PCs for 80% Variance](images/Rolling_252_Day_Window_PCA_PCs_for_80_variance.png)
+
+---
+
 # Technologies Used
 
 - Python
@@ -1566,7 +1796,6 @@ pip install -r requirements.txt
 
 Some ideas I'd like to add as I continue learning:
 
-- Principal Component Analysis (PCA)
 - Cointegration and Pairs Trading
 - Options Fundamentals
 - Binomial Option Pricing
@@ -1609,6 +1838,7 @@ financial-data-analysis/
 ├── factor_models.py
 ├── return_and_risk_attribution.py
 ├── value_at_risk.py
+├── principal_component_analysis.py
 │
 ├── requirements.txt
 ├── README.md
@@ -1634,7 +1864,7 @@ financial-data-analysis/
 - [x] CAPM and Fama-French Factor Models
 - [x] Portfolio Return and Risk Attribution
 - [x] Value at Risk (VaR) and Expected Shortfall
-- [ ] Principal Component Analysis
+- [x] Principal Component Analysis
 - [ ] Cointegration and Pairs Trading
 - [ ] Options Fundamentals
 - [ ] Binomial Option Pricing
