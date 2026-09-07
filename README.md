@@ -1757,7 +1757,7 @@ The program completes with a final validation message when all checks pass:
 
 #### Rolling PCs Required for 80% Variance
 
-![Rolling PCA PCs for 80% Variance](images/Rolling_252_Day_Window_PCA_PCs_for_80_variance.png)
+![Rolling PCA PCs for 80% Variance](images/Rolling_252_Day_Window_PCA__PCs_for_80_variance.png)
 
 ---
 
