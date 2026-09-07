@@ -1531,8 +1531,6 @@ The program completes with a final validation message when all checks pass:
 
 ---
 
----
-
 ## 16. Principal Component Analysis (`principal_component_analysis.py`)
 
 Uses Principal Component Analysis (PCA) to examine how much of the movement across a diversified group of stocks can be explained by a smaller number of common components.
@@ -1608,7 +1606,7 @@ The reconstruction error was approximately:
 
 The reconstruction results closely match the amount of variance discarded at each threshold.
 
-For example, 8 PCs retain approximately 80.6% of total variance and produce a reconstruction error of approximately 19.4%.
+For example, 8 PCs retain approximately 80.6% of total variance and produce a reconstruction MSE of approximately 0.194, closely matching the proportion of standardised variance not retained.
 
 Using all 18 components reconstructs the original standardised dataset almost perfectly.
 
@@ -1789,6 +1787,7 @@ Clone the repository and install the required Python packages using:
 
 ```bash
 pip install -r requirements.txt
+```
 
 ---
 
