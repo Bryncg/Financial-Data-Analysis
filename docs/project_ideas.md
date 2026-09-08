@@ -189,6 +189,8 @@ long-term ideas into a full project.
 The original planned features are kept here so that the progression of the
 repository can still be seen.
 
+The project numbers below retain the original roadmap numbering, so they differ slightly from the current repository numbering after the Efficient Frontier and Portfolio Optimisation projects were combined.
+
 ## Project 9 - Rolling Sharpe Ratio
 **Status: Completed and expanded**
 
@@ -351,6 +353,7 @@ Measure portfolio sensitivity to the wider market and estimate expected returns 
 Possible future extensions from the original plan:
 - Add a momentum factor
 - Examine coefficient significance using t-statistics and p-values
+- Compare observed returns with factor-implied or residual returns
 
 ### Goal
 
@@ -457,6 +460,8 @@ Test whether two assets maintain a stable long-term relationship and build a sim
 - Evaluate return, volatility, Sharpe Ratio and drawdown
 - Examine periods where the relationship breaks down
 - Consider the Johansen test later as a multi-asset extension
+- Consider bid-ask spread and slippage
+- Consider borrow costs for the short position
 
 ### Concepts to Learn
 
@@ -557,25 +562,25 @@ Test whether two assets maintain a stable long-term relationship and build a sim
 
 # Additional Long-Term Ideas
 
-- Value at Risk
-- Conditional Value at Risk
-- Historical Simulation VaR
-- Parametric VaR
-- Stress Testing
-- Scenario Analysis
-- Maximum Drawdown Modelling
-- Volatility Forecasting
-- Exponentially Weighted Moving Average
-- GARCH Models
-- Risk-Parity Portfolios
-- Black-Litterman Model
-- Momentum Strategies
-- Trend-Following Strategies
-- Relative-Value Strategies
-- Index-Constituent Analysis
-- Market-Breadth Analysis
-- Portfolio Turnover
-- Transaction Costs
-- Slippage
-- Walk-Forward Testing
-- Out-of-Sample Testing
+- [x] Value at Risk
+- [x] Conditional Value at Risk / Expected Shortfall
+- [x] Historical Simulation VaR
+- [x] Parametric VaR
+- [ ] Stress Testing
+- [ ] Scenario Analysis
+- [x] Maximum Drawdown Modelling
+- [ ] Volatility Forecasting
+- [ ] Exponentially Weighted Moving Average
+- [ ] GARCH Models
+- [ ] Risk-Parity Portfolios
+- [ ] Black-Litterman Model
+- [ ] Momentum Strategies
+- [ ] Trend-Following Strategies
+- [ ] Relative-Value Strategies
+- [ ] Index-Constituent Analysis
+- [ ] Market-Breadth Analysis
+- [ ] Portfolio Turnover
+- [ ] Transaction Costs
+- [ ] Slippage
+- [ ] Walk-Forward Testing
+- [x] Out-of-Sample Testing
