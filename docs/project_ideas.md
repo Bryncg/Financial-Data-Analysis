@@ -177,9 +177,20 @@ Extend static portfolio variance into a rolling analysis to measure how the risk
 
 ---
 
-# Planned Projects
+# Original Roadmap and Current Status
+
+The sections below reflect the original roadmap for the repository.
+
+As the projects developed, some were expanded or combined. In particular,
+Efficient Frontier and Portfolio Optimisation were combined into one project,
+while Value at Risk and Expected Shortfall was moved forward from the
+long-term ideas into a full project.
+
+The original planned features are kept here so that the progression of the
+repository can still be seen.
 
 ## Project 9 - Rolling Sharpe Ratio
+**Status: Completed and expanded**
 
 ### Goal
 
@@ -211,6 +222,7 @@ Measure how the portfolio's risk-adjusted performance changes through time.
 ---
 
 ## Project 10 - Monte Carlo Portfolio Simulation
+**Status: Completed and expanded**
 
 ### Goal
 
@@ -240,6 +252,7 @@ Generate many possible portfolio allocations and compare their expected return, 
 ---
 
 ## Project 11 - Efficient Frontier
+**Status: Completed and expanded**
 
 ### Goal
 
@@ -267,6 +280,11 @@ Visualise the set of portfolios offering the highest expected return for each le
 ---
 
 ## Project 12 - Portfolio Optimisation
+**Status: Completed as part of the Efficient Frontier and Portfolio Optimisation project**
+
+Possible future extensions:
+- Short-selling comparison
+- Sensitivity analysis for expected-return and covariance estimates
 
 ### Goal
 
@@ -296,6 +314,10 @@ Use numerical optimisation rather than random simulation to solve directly for o
 ---
 
 ## Project 13 - CAPM and Portfolio Beta
+**Status: Completed and expanded**
+
+Possible future extension:
+- Rolling beta analysis
 
 ### Goal
 
@@ -324,6 +346,11 @@ Measure portfolio sensitivity to the wider market and estimate expected returns 
 ---
 
 ## Project 14 - Factor Models
+**Status: Completed and expanded**
+
+Possible future extensions from the original plan:
+- Add a momentum factor
+- Examine coefficient significance using t-statistics and p-values
 
 ### Goal
 
@@ -352,6 +379,10 @@ Explain portfolio returns using common systematic risk factors.
 ---
 
 ## Project 15 - Return and Risk Attribution
+**Status: Completed and expanded**
+
+Possible future extension:
+- Drawdown attribution by holding
 
 ### Goal
 
@@ -378,6 +409,7 @@ Identify which holdings drive portfolio return, volatility and drawdowns.
 ---
 
 ## Project 16 - Principal Component Analysis
+**Status: Completed and expanded**
 
 ### Goal
 
@@ -412,13 +444,19 @@ Test whether two assets maintain a stable long-term relationship and build a sim
 ### Planned Features
 
 - Compare correlation with cointegration
-- Test for stationarity
-- Estimate a hedge ratio
-- Construct a spread
+- Use a separate formation and trading period
+- Use the Engle-Granger cointegration test
+- Estimate the hedge ratio
+- Construct the spread
+- Use the Augmented Dickey-Fuller test to check spread stationarity
 - Calculate rolling z-scores
-- Define entry and exit signals
-- Backtest a simple pairs strategy
-- Examine periods when the signal breaks down
+- Define entry, exit and stop rules
+- Backtest the pairs strategy on unseen data
+- Include transaction costs
+- Measure portfolio turnover
+- Evaluate return, volatility, Sharpe Ratio and drawdown
+- Examine periods where the relationship breaks down
+- Consider the Johansen test later as a multi-asset extension
 
 ### Concepts to Learn
 
